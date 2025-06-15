@@ -4,6 +4,8 @@
 // Veja a função BuildTriangle() em "main.cpp".
 layout (location = 0) in vec4 model_coefficients;
 layout (location = 1) in vec4 color_coefficients;
+layout (location = 2) in vec4 normal_coefficients;
+layout (location = 3) in vec2 texture_coefficients;
 
 // Atributos de vértice que serão gerados como saída ("out") pelo Vertex Shader.
 // ** Estes serão interpolados pelo rasterizador! ** gerando, assim, valores
@@ -15,6 +17,15 @@ out vec4 cor_interpolada_pelo_rasterizador;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+
+// Atributos de vértice que serão gerados como saída ("out") pelo Vertex Shader.
+// ** Estes serão interpolados pelo rasterizador! ** gerando, assim, valores
+// para cada fragmento, os quais serão recebidos como entrada pelo Fragment
+// Shader. Veja o arquivo "shader_fragment.glsl".
+out vec4 position_world;
+out vec4 position_model;
+out vec4 normal;
+out vec2 texcoords;
 
 // Variável booleana no código C++ também enviada para a GPU
 uniform bool render_as_black;
@@ -44,6 +55,24 @@ void main()
     //     gl_Position.z = model_coefficients.z;
     //     gl_Position.w = model_coefficients.w;
     //
+
+
+    // Agora definimos outros atributos dos vértices que serão interpolados pelo
+    // rasterizador para gerar atributos únicos para cada fragmento gerado.
+
+    // Posição do vértice atual no sistema de coordenadas global (World).
+    position_world = model * model_coefficients;
+
+    // Posição do vértice atual no sistema de coordenadas local do modelo.
+    position_model = model_coefficients;
+
+    // Normal do vértice atual no sistema de coordenadas global (World).
+    // Veja slides 123-151 do documento Aula_07_Transformacoes_Geometricas_3D.pdf.
+    normal = inverse(transpose(model)) * normal_coefficients;
+    normal.w = 0.0;
+
+    // Coordenadas de textura obtidas do arquivo OBJ (se existirem!)
+    texcoords = texture_coefficients;
 
     if ( render_as_black )
     {

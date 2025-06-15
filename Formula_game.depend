@@ -1690,7 +1690,7 @@
 	"../trigonometric.hpp"
 	"../matrix.hpp"
 
-1749759756 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\curvas.cpp
+1749841526 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\curvas.cpp
 	"../include/curvas.h"
 
 1749759750 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\curvas.h
@@ -1995,7 +1995,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1749774478 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
+1750029010 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -2036,14 +2036,14 @@
 	<GLFW/glfw3.h>
 	"carro.h"
 
-1749774829 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\carro.h
+1750029174 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\carro.h
 	<glm/glm.hpp>
 	<matrices.h>
 
 1749759756 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\matrices.cpp
 	"../include/matrices.h"
 
-1749759756 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\moving.cpp
+1749851439 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\moving.cpp
 	"../include/moving.h"
 
 1749759756 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\textrendering.cpp
