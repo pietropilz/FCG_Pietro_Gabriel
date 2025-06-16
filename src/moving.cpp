@@ -1,10 +1,8 @@
 #include "../include/moving.h"
 
-#define MAX_SPEED   30.0
+#define MAX_SPEED   20.0
 #define ACCELERATION    10.0
-#define TURN 10.0
-
-
+#define TURN 1.0
 
 bool tecla_D = false;
 bool tecla_S = false;
@@ -12,11 +10,34 @@ bool tecla_A = false;
 bool tecla_W = false;
 
 float speed = 0.0f;
+float speedA = 0.0f;
 float last_speed = 0.0f;
+float last_speedA = 0.0f;
+
+double g_LastCursorPosX, g_LastCursorPosY;
+float g_Theta = 0, g_Phi =0;
+
+bool g_LeftMouseButtonPressed = false;
+
 
 void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float delta_t)
 {
     constexpr float max_speed = (float)MAX_SPEED;
+
+    if (g_Theta != 0.0f)
+    {
+        float x_antigo = obj_vec[0];
+        float z_antigo = obj_vec[2];
+
+        float cos_theta = cos(g_Theta);
+        float sin_theta = sin(g_Theta);
+
+        obj_vec[0] = x_antigo * cos_theta - z_antigo * sin_theta;
+        obj_vec[2] = x_antigo * sin_theta + z_antigo * cos_theta;
+
+        obj_angle -= g_Theta;
+        g_Theta = 0.0f;
+    }
 
 
     if (tecla_W)
@@ -41,27 +62,43 @@ void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float del
 
     if (!tecla_S && !tecla_W)
     {
-        if(speed>0) speed -= speed * 0.1f * delta_t;
-        else if(speed <0) speed -= speed * 0.1f * delta_t;
+        if(speed>0) speed -= speed * delta_t;
+        else if(speed <0) speed -= speed  * delta_t;
     }
 
-    if(tecla_A || tecla_D)
+
+
+   if (tecla_A)
     {
-        constexpr float turn_rate = TURN/max_speed;
-
-        float turn;
-
-        if(fabs(speed) < 2.0f) turn = delta_t*fabs(speed)/2.0f;
-        else turn = delta_t*(1/(1 + turn_rate*fabs(speed)));
-
-        float dir = (speed >= 0.0f) ? 1.0f : -1.0f;
-
-        if (tecla_A) obj_angle += dir * turn;
-        if (tecla_D) obj_angle -= dir * turn;
-
-        obj_vec = glm::vec4(-sin(obj_angle), 0.0f, -cos(obj_angle), 0.0f);
+        float acceleration = (float)(ACCELERATION/4.0f)*(1 - speedA/(max_speed/4.0f));
+        speedA += acceleration*delta_t;
     }
+
+    if (tecla_D)
+    {
+        float deaceleration = (float)(ACCELERATION/4.0f)*(1 + speedA/(max_speed/4.0f));
+        speedA -= delta_t*deaceleration;
+    }
+
+
+    if(speedA*last_speedA < 0)
+    {
+        speedA = 0.0f;
+        tecla_D = false, tecla_A = false;
+    }
+
+    if (!tecla_A && !tecla_D)
+    {
+        if(speedA>0) speedA -= speedA * delta_t;
+        else if(speedA <0) speedA -= speedA  * delta_t;
+    }
+
     obj_pos += obj_vec*speed*delta_t;
+    glm::vec4 transversal = crossproduct(obj_vec, glm::vec4(0.0f,1.0f,0.0f,0.0f));
+
+    obj_pos -= transversal*speedA*delta_t;
+
+    last_speedA = speedA;
     last_speed = speed;
     carro.velocidade = speed;
 }
@@ -99,4 +136,38 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     {
         if(action == GLFW_PRESS) freeCamera = !freeCamera;
     }
+}
+
+/*
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        glfwGetCursorPos(window, &g_LastCursorPosX, &g_LastCursorPosY);
+        g_LeftMouseButtonPressed = true;
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+    {
+        g_LeftMouseButtonPressed = false;
+        g_CameraPhi = 0;
+        g_CameraTheta = 0;
+    }
+}
+*/
+
+void inicializaCursor(GLFWwindow* window){
+    glfwGetCursorPos(window, &g_LastCursorPosX, &g_LastCursorPosY);
+}
+
+void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    float dx = xpos - g_LastCursorPosX;
+    float dy = ypos - g_LastCursorPosY;
+
+    g_Theta = 0.01f*dx;
+    g_Phi   = 0.01f*dy;
+
+
+    g_LastCursorPosX = xpos;
+    g_LastCursorPosY = ypos;
 }

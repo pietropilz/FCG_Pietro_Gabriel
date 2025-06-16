@@ -192,7 +192,8 @@ int main(int argc, char* argv[])
     }
 
     glfwSetKeyCallback(window, KeyCallback);
-    glfwSetMouseButtonCallback(window, MouseButtonCallback);
+    //glfwSetMouseButtonCallback(window, MouseButtonCallback);
+    inicializaCursor(window);
     glfwSetCursorPosCallback(window, CursorPosCallback);
     glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
     glfwSetWindowSize(window, 800, 800);

@@ -11,5 +11,8 @@ extern bool freeCamera;
 
 void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float delta_t);
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod);
+//void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void inicializaCursor(GLFWwindow* window);
+void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
 
 #endif
