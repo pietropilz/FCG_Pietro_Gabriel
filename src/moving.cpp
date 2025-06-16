@@ -164,7 +164,7 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
     float dx = xpos - g_LastCursorPosX;
     float dy = ypos - g_LastCursorPosY;
 
-    g_Theta = 0.01f*dx;
+    g_Theta = 0.005f*dx;
     g_Phi   = 0.01f*dy;
 
 

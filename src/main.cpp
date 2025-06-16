@@ -260,6 +260,7 @@ int main(int argc, char* argv[])
     GLint view_uniform            = glGetUniformLocation(g_GpuProgramID, "view"); // Variável da matriz "view" em shader_vertex.glsl
     GLint projection_uniform      = glGetUniformLocation(g_GpuProgramID, "projection"); // Variável da matriz "projection" em shader_vertex.glsl
     GLint render_as_black_uniform = glGetUniformLocation(g_GpuProgramID, "render_as_black"); // Variável booleana em shader_vertex.glsl
+    g_object_id_uniform = glGetUniformLocation(g_GpuProgramID, "object_id"); // Variável booleana em shader_vertex.glsl
 
 
     glEnable(GL_DEPTH_TEST);
@@ -322,6 +323,7 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
+//achar textureImage lab 5
         #define REX 0
         #define BUNNY 1
         #define TREE 3
@@ -359,7 +361,7 @@ int main(int argc, char* argv[])
 
 
 
-        model = Matrix_Scale(1.0f, 1.0f, 1.0f) * Matrix_Translate(10.0f, 1.0f, 0.0f);  // Ajuste a transformação conforme o local onde deseja desenhar o Bunny
+        model = Matrix_Scale(1.0f, 1.0f, 1.0f) * Matrix_Translate(10.0f, 1.0f, 0.0f);
         glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, BUNNY);
         DrawVirtualObject("the_bunny");

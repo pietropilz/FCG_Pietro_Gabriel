@@ -71,43 +71,26 @@ void main()
     /////////////////////////////////////////
     if ( object_id == REX )
     {
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
-
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
-
-        float x = position_model.x;
-        float y = position_model.y;
-
-        U = (x - minx) / (maxx - minx);
-        V = (y - miny) / (maxy - miny);
-
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        U = texcoords.x;
+        V = texcoords.y;
         vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
-
-        vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
-
-        // Equação de Iluminação
-        float lambert = max(0,dot(n,l));
-
         color.rgb = Kd0;
+        //vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
+        // Equação de Iluminação
+        //float lambert = max(0,dot(n,l));
 
-
+    } else {
+        //discard;
+        //color = cor_interpolada_pelo_rasterizador;
+        color.rgb = vec3(1,0,0);
         color.a = 1;
-
-        // Cor final com correção gamma, considerando monitor sRGB.
-        // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
-        color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
     }
 
-    color = cor_interpolada_pelo_rasterizador;
+    color.a = 1;
 
-
-
-
-    /////////////////////////////////////////
-    // Definimos a cor final de cada fragmento utilizando a cor interpolada
-    // pelo rasterizador.
+    // Cor final com correção gamma, considerando monitor sRGB.
+    // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
+    color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
 }
 
