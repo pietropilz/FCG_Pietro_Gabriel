@@ -1,8 +1,8 @@
 #include "../include/moving.h"
 
-#define MAX_SPEED   90.0
-#define ACCELERATION    20.0
-#define TURN 1.0
+#define MAX_SPEED   30.0
+#define ACCELERATION    10.0
+#define TURN 10.0
 
 
 

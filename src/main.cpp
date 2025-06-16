@@ -38,6 +38,8 @@
 #include "curvas.h"
 #include "carro.h"
 
+#define PI 3.1415926
+
 // Estrutura que representa um modelo geométrico carregado a partir de um
 // arquivo ".obj". Veja https://en.wikipedia.org/wiki/Wavefront_.obj_file .
 struct ObjModel
@@ -217,6 +219,22 @@ int main(int argc, char* argv[])
     ComputeNormals(&rexmodel);
     BuildTrianglesAndAddToVirtualScene(&rexmodel);
 
+    ObjModel bunnymodel("../../data/bunny.obj");
+    ComputeNormals(&bunnymodel);
+    BuildTrianglesAndAddToVirtualScene(&bunnymodel);
+
+    ObjModel treemodel("../../data/tree/MapleTree.obj");
+    ComputeNormals(&treemodel);
+    BuildTrianglesAndAddToVirtualScene(&treemodel);
+
+    ObjModel leavesmodel("../../data/tree/MapleTreeLeaves.obj");
+    ComputeNormals(&leavesmodel);
+    BuildTrianglesAndAddToVirtualScene(&leavesmodel);
+
+    ObjModel dilomodel("../../data/dilo/dilophosaurus.obj");
+    ComputeNormals(&dilomodel);
+    BuildTrianglesAndAddToVirtualScene(&dilomodel);
+
     if ( argc > 1 )
     {
         ObjModel model(argv[1]);
@@ -248,6 +266,9 @@ int main(int argc, char* argv[])
 
 
     float prev_time = (float)glfwGetTime();
+
+    float girar;
+
     // Ficamos em um loop infinito, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
     {
@@ -271,6 +292,8 @@ int main(int argc, char* argv[])
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
         curva_circulo(current_time, bezier_pos);
+        girar = (girar + delta_t);
+        if (girar > 2*PI)girar = 0;
     //------------------------------------------------------------------------------------------
     //movimentação da camera
     //funções na camera.h
@@ -299,6 +322,10 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
         #define REX 0
+        #define BUNNY 1
+        #define TREE 3
+        #define FOLHAS 4
+        #define DILO 5
 
         //Desenho do carro de f1(agora cubo)
 
@@ -310,23 +337,51 @@ int main(int argc, char* argv[])
         DrawVirtualObject("META");
         DrawVirtualObject("METAojo");
         DrawVirtualObject("DIENTS");
-        DrawVirtualObject("UNAS");
+        DrawVirtualObject("UNAS");;
 
-/*
-        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glBindVertexArray(vertex_array_cube);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);
-*/
 
-        //Desenho do bezier
-        model = Matrix_Scale(0.01f, 0.01f, 0.01f) * Matrix_Translate(bezier_pos.x, bezier_pos.y+ 0.5f, bezier_pos.z)*Matrix_Scale(0.5f,0.5f,0.5f)*Matrix_Identity();
+        model = Matrix_Scale(0.01f, 0.01f, 0.01f)
+         * Matrix_Translate(0.0f,160.0f,0.0f)
+         //* Matrix_Rotate_Y(-girar)
+         * Matrix_Translate(bezier_pos.x, bezier_pos.y + 0.5f, bezier_pos.z)
+         * Matrix_Scale(70.0f,70.0f,70.0f);
         glUniformMatrix4fv(model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
-        glUniform1i(g_object_id_uniform, REX);
-        DrawVirtualObject("META");
-        DrawVirtualObject("METAojo");
-        DrawVirtualObject("DIENTS");
-        DrawVirtualObject("UNAS");
+        glUniform1i(g_object_id_uniform, DILO);
+        DrawVirtualObject("Cylinder.004");
+        DrawVirtualObject("Cylinder.003");
+        DrawVirtualObject("Cylinder.002");
+        DrawVirtualObject("Cylinder.001");
+        DrawVirtualObject("Cylinder.000");
+        DrawVirtualObject("Cylinder.027");
 
+
+
+
+
+        model = Matrix_Scale(1.0f, 1.0f, 1.0f) * Matrix_Translate(10.0f, 1.0f, 0.0f);  // Ajuste a transformação conforme o local onde deseja desenhar o Bunny
+        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(g_object_id_uniform, BUNNY);
+        DrawVirtualObject("the_bunny");
+
+        for(float i = -550.0f; i <= 450.00f; i += 100.0f){
+            for(float j = -550.0f; j <= 450.00f; j += 100.0f){
+
+                model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
+                glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                glUniform1i(g_object_id_uniform, TREE);
+                DrawVirtualObject("tree_Mesh");
+
+                model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
+                glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                glUniform1i(g_object_id_uniform, FOLHAS);
+                DrawVirtualObject("leaves");
+            }
+
+        }
+
+
+        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(g_object_id_uniform, 1);
         desenhaMapa(model_uniform);
 
 
