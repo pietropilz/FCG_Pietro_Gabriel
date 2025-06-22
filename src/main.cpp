@@ -370,18 +370,20 @@ int main(int argc, char* argv[])
         glUniform1i(g_object_id_uniform, BUNNY);
         DrawVirtualObject("the_bunny");
 
-        for(float i = -550.0f; i <= 450.00f; i += 100.0f)
+        camera_view_vector = camera_view_vector/norm(camera_view_vector);
+
+        for(float i = -200.0f; i <= 200.00f; i += 40.0f)
         {
-            for(float j = -550.0f; j <= 450.00f; j += 100.0f)
+            for(float j = -200.0f; j <= 200.00f; j += 40.0f)
             {
                 glm::vec4 arvore = glm::vec4(i, 0.0f, j, 1.0f);
                 glm::vec4 auxiliar = arvore - camera_position_c;
                 float distancia = norm(auxiliar);
                 glm::vec4 vetor_aux = auxiliar / distancia;
 
-                if(((dotproduct(vetor_aux, camera_view_vector) > 0.5f) && distancia < 400.0f) || distancia < 50.0f)
+                if(((dotproduct(vetor_aux, camera_view_vector) >= 0.5f) && distancia < 200.0f) || distancia < 15.0f)
                 {
-                    model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
+                    model = Matrix_Translate(i, 0.0f, j) * Matrix_Scale(0.4f, 0.4f, 0.4f);
                     glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
                     glUniform1i(g_object_id_uniform, TREE);
                     DrawVirtualObject("tree_Mesh");
