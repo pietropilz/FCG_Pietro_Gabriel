@@ -39,6 +39,7 @@
 #include "carro.h"
 
 #define PI 3.1415926
+#define FARPLANE 200.0f
 
 // Estrutura que representa um modelo geométrico carregado a partir de um
 // arquivo ".obj". Veja https://en.wikipedia.org/wiki/Wavefront_.obj_file .
@@ -88,7 +89,7 @@ struct ObjModel
                         "Erro: Objeto sem nome dentro do arquivo '%s'.\n"
                         "Veja https://www.inf.ufrgs.br/~eslgastal/fcg-faq-etc.html#Modelos-3D-no-formato-OBJ .\n"
                         "*********************************************\n",
-                    filename);
+                        filename);
                 throw std::runtime_error("Objeto sem nome.");
             }
             printf("- Objeto '%s'\n", shapes[shape].name.c_str());
@@ -299,19 +300,21 @@ int main(int argc, char* argv[])
         desloca(carro.posicao, carro.vetor, carro.angulo, delta_t);
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
-        curva_circulo(current_time, bezier_pos);
+        float angle_stego;
+        curva_circulo(current_time, bezier_pos, angle_stego);
         girar = (girar + delta_t);
         if (girar > 2*PI)girar = 0;
-    //------------------------------------------------------------------------------------------
-    //movimentação da camera
-    //funções na camera.h
+        //------------------------------------------------------------------------------------------
+        //movimentação da camera
+        //funções na camera.h
         camera_view_vector = carro.vetor;
         camera_up_vector = glm::vec4(0.0f,1.0f,0.0f,0.0f); // Vetor "up" fixado para apontar para o "céu" (eito Y global)
         if(!freeCamera)
         {
             atualiza_lookCamera(camera_position_c, camera_view_vector, carro);
         }
-        else{
+        else
+        {
             atualiza_freeCamera(camera_position_c, camera_view_vector, carro.posicao);
         }
 
@@ -330,19 +333,19 @@ int main(int argc, char* argv[])
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //achar textureImage lab 5
-        #define REX 0
-        #define PLANE 1
-        #define TREE 2
-        #define FOLHAS 3
-        #define STEG 4
-        #define BUNNY 5
+#define REX 0
+#define PLANE 1
+#define TREE 2
+#define FOLHAS 3
+#define STEG 4
+#define BUNNY 5
 
-        //Desenho do carro de f1(agora cubo)
+        //Desenho do dinossauro
 
         glUniform1i(g_render_as_black_uniform, false);
         model = carro.ModelMatrix();
 
-        glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
+        glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, REX);
         DrawVirtualObject("META");
         DrawVirtualObject("METAojo");
@@ -351,11 +354,11 @@ int main(int argc, char* argv[])
 
 
         model = Matrix_Scale(0.01f, 0.01f, 0.01f)
-         * Matrix_Translate(0.0f,160.0f,0.0f)
-         // Matrix_Rotate_Z(3.141/2.0)
-         * Matrix_Translate(bezier_pos.x, bezier_pos.y + 0.5f, bezier_pos.z)
-         * Matrix_Scale(70.0f,70.0f,70.0f);
-        glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
+                * Matrix_Translate(bezier_pos.x, bezier_pos.y + 100.0f, bezier_pos.z)
+                * Matrix_Scale(70.0f,70.0f,70.0f)
+                * Matrix_Rotate_Y(-angle_stego + PI/2.0f);
+
+        glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, STEG);
         DrawVirtualObject("stego_body");
         DrawVirtualObject("stego_iris");
@@ -367,15 +370,24 @@ int main(int argc, char* argv[])
         glUniform1i(g_object_id_uniform, BUNNY);
         DrawVirtualObject("the_bunny");
 
-        for(float i = -550.0f; i <= 450.00f; i += 100.0f){
-            for(float j = -550.0f; j <= 450.00f; j += 100.0f){
+        for(float i = -550.0f; i <= 450.00f; i += 100.0f)
+        {
+            for(float j = -550.0f; j <= 450.00f; j += 100.0f)
+            {
+                glm::vec4 arvore = glm::vec4(i, 0.0f, j, 1.0f);
+                glm::vec4 auxiliar = arvore - camera_position_c;
+                float distancia = norm(auxiliar);
+                glm::vec4 vetor_aux = auxiliar / distancia;
 
-                model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
-                glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                glUniform1i(g_object_id_uniform, TREE);
-                DrawVirtualObject("tree_Mesh");
-                DrawVirtualObject("leaves");
-                DrawVirtualObject("leaves_001");
+                if(((dotproduct(vetor_aux, camera_view_vector) > 0.5f) && distancia < 400.0f) || distancia < 50.0f)
+                {
+                    model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
+                    glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                    glUniform1i(g_object_id_uniform, TREE);
+                    DrawVirtualObject("tree_Mesh");
+                    DrawVirtualObject("leaves");
+                    DrawVirtualObject("leaves_001");
+                }
 
             }
 
@@ -666,7 +678,7 @@ void TextRendering_ShowFramesPerSecond(GLFWwindow* window)
 
 void TextRendering_ShowSpeed(GLFWwindow* window)
 {
-   if ( !g_ShowInfoText )
+    if ( !g_ShowInfoText )
         return;
 
     static char  buffer[20] = "?? km/h";

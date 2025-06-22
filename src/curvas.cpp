@@ -1,4 +1,5 @@
 #include "../include/curvas.h"
+#include "../include/matrices.h"
 
 #define RAIO 500.0
 #define CENTRO_X 0.0
@@ -34,11 +35,16 @@ void curva_mov(float delta_t, glm::vec4& bezier_pos){
     bezier_pos = bezier(t);
 }
 
-void curva_circulo(float delta_t, glm::vec4& bezier_pos){
+void curva_circulo(float delta_t, glm::vec4& bezier_pos, float& angulo){
     float t = std::fmod(delta_t, 4.0f) / 2.0f;
 
     if(t < 1.0f) bezier_pos = bezier_circulo_cima(t);
     else bezier_pos = bezier_circulo_baixo(t - 1.0f);
+
+    glm::vec4 auxiliar = bezier_pos - glm::vec4(0.0f,0.0f,0.0f,1.0f);
+    auxiliar /= norm(auxiliar);
+    float valor_cos = acos(dotproduct(auxiliar, glm::vec4(0.0f,0.0f,-1.0f, 0.0f)));
+    angulo = (bezier_pos[0] >= 0) ? valor_cos : -valor_cos;
 }
 
 glm::vec4 bezier_circulo_baixo(float t){

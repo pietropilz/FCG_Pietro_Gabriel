@@ -5,6 +5,6 @@
 #include <cmath>
 
 void curva_mov(float delta_t, glm::vec4& bezier_pos);
-void curva_circulo(float delta_t, glm::vec4& bezier_pos);
+void curva_circulo(float delta_t, glm::vec4& bezier_pos, float& angulo);
 
 #endif
