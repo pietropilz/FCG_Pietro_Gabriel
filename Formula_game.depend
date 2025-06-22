@@ -1025,7 +1025,7 @@
 	<glm/glm.hpp>
 	<matrices.h>
 
-1750107917 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\camera.cpp
+1750432662 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\camera.cpp
 	"../include/camera.h"
 	"../include/matrices.h"
 	"carro.h"
@@ -1995,7 +1995,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1750107917 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
+1750538205 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -2036,7 +2036,7 @@
 	<GLFW/glfw3.h>
 	"carro.h"
 
-1750107914 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\carro.h
+1750434093 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\carro.h
 	<glm/glm.hpp>
 	<matrices.h>
 

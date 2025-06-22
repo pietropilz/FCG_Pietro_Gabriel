@@ -26,6 +26,11 @@ uniform mat4 projection;
 
 // Identificador que define qual objeto está sendo desenhado no momento
 #define REX 0
+#define PLANE 1
+#define TREE 2
+#define FOLHAS 3
+#define STEG 4
+
 uniform int object_id;
 
 // Parâmetros da axis-aligned bounding box (AABB) do modelo
@@ -33,8 +38,13 @@ uniform vec4 bbox_min;
 uniform vec4 bbox_max;
 
 // Variáveis para acesso das imagens de textura
-uniform sampler2D TextureImage0;
-uniform sampler2D TextureImage1;
+uniform sampler2D TextureImage0; //rex
+uniform sampler2D TextureImage1; //rex2
+uniform sampler2D TextureImage2; //tronco
+uniform sampler2D TextureImage3; //folhas
+uniform sampler2D TextureImage4; //steg
+uniform sampler2D TextureImage5; //grass
+
 
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec4 color;
@@ -66,31 +76,145 @@ void main()
     // Coordenadas de textura U e V
     float U = 0.0;
     float V = 0.0;
+    float W = 0.0;
 
 
     /////////////////////////////////////////
     if ( object_id == REX )
     {
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
-        U = texcoords.x;
-        V = texcoords.y;
-        vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
-        color.rgb = Kd0;
-        //vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
-        // Equação de Iluminação
-        //float lambert = max(0,dot(n,l));
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
 
-    } else {
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float x = position_model.x;
+        float y = position_model.y;
+
+        U = (x - minx) / (maxx - minx);
+        V = (y - miny) / (maxy - miny);
+
+        vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
+        vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
+        // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd0 * Kd1 * (lambert + 0.5);
+
+    }else if( object_id == TREE ){
+        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float x = position_model.x;
+        float y = position_model.y;
+
+        U = (x - minx) / (maxx - minx);
+        V = (y - miny) / (maxy - miny);
+
+        vec3 Kd2 = texture(TextureImage2, vec2(U,V)).rgb;
+        // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd2 * (lambert + 0.5);
+
+    }else if( object_id == FOLHAS ){
+        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        float x = position_model.x;
+        float y = position_model.y;
+        float z = position_model.z;
+
+        U = (x - minx) / (maxx - minx);
+        V = (y - miny) / (maxy - miny);
+        W = (z - minz) / (maxz - minz);
+        vec3 Kd0 = texture(TextureImage3, vec2(V,U)).rgb;
+        vec3 Kd1 = texture(TextureImage3, vec2(W,U)).rgb;
+        vec3 Kd2 = texture(TextureImage3, vec2(V,W)).rgb;
+        vec3 Kd3 = texture(TextureImage3, vec2(U,V)).rgb;
+        vec3 Kd4 = texture(TextureImage3, vec2(U,W)).rgb;
+        vec3 Kd5 = texture(TextureImage3, vec2(W,V)).rgb;
+        // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd0 * Kd1 * Kd2 * Kd3 * Kd4 * Kd5 * (lambert + 0.5);
+
+    }else if( object_id == STEG ){
+        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        float x = position_model.x;
+        float y = position_model.y;
+        float z = position_model.z;
+
+        U = (x - minx) / (maxx - minx);
+        V = (y - miny) / (maxy - miny);
+        W = (z - minz) / (maxz - minz);
+
+        vec3 Kd0 = texture(TextureImage4, vec2(V,W)).rgb;
+        vec3 Kd1 = texture(TextureImage4, vec2(V,W)).rgb;
+        // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd0 * (lambert + 0.5);
+
+    }else if( object_id == PLANE ){
+        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        float x = position_model.x;
+        float y = position_model.y;
+        float z = position_model.z;
+
+        float repeat = 500.0;
+        U = (x - minx) / (maxx - minx)*repeat;
+        V = (y - miny) / (maxy - miny*repeat);
+        W = (z - minz) / (maxz - minz)*repeat;
+
+
+        vec3 Kd0 = texture(TextureImage5, vec2(U,W)).rgb;
+                // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd0 * (lambert + 0.5);
+    }else{
         //discard;
         //color = cor_interpolada_pelo_rasterizador;
         color.rgb = vec3(1,0,0);
         color.a = 1;
+        color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
     }
 
-    color.a = 1;
+   //color.a = 1;
 
     // Cor final com correção gamma, considerando monitor sRGB.
     // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
-    color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
+    //color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
 }
 

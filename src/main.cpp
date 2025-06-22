@@ -105,7 +105,7 @@ void PopMatrix(glm::mat4& M);
 void BuildTrianglesAndAddToVirtualScene(ObjModel*); // Constrói representação de um ObjModel como malha de triângulos para renderização
 void ComputeNormals(ObjModel* model); // Computa normais de um ObjModel, caso não existam.
 void LoadShadersFromFiles(); // Carrega os shaders de vértice e fragmento, criando um programa de GPU
-void LoadTextureImage(const char* filename); // Função que carrega imagens de textura
+void LoadTextureImage(const char* filenam, bool repeat); // Função que carrega imagens de textura
 void DrawVirtualObject(const char* object_name); // Desenha um objeto armazenado em g_VirtualScene
 GLuint LoadShader_Vertex(const char* filename);   // Carrega um vertex shader
 GLuint LoadShader_Fragment(const char* filename); // Carrega um fragment shader
@@ -158,6 +158,7 @@ GLint g_projection_uniform;
 GLint g_object_id_uniform;
 GLint g_bbox_min_uniform;
 GLint g_bbox_max_uniform;
+
 
 // Número de texturas carregadas pela função LoadTextureImage()
 GLuint g_NumLoadedTextures = 0;
@@ -212,17 +213,21 @@ int main(int argc, char* argv[])
     LoadShadersFromFiles();
 
     // Carregamos duas imagens para serem utilizadas como textura
-    LoadTextureImage("../../data/GRANDECO.jpg");      // TextureImage0
-    LoadTextureImage("../../data/GRANDEB2.jpg");      // TextureImage1
+    LoadTextureImage("../../data/GRANDECO.jpg", false);      // TextureImage0
+    LoadTextureImage("../../data/GRANDEB2.jpg", false);      // TextureImage1
+    LoadTextureImage("../../data/tree/maple_bark.png", false); //troncos
+    LoadTextureImage("../../data/tree/maple_leaf.png", false); //folhas
+    LoadTextureImage("../../data/steg/STEGOSRS_1.png", false); //stegossauro
+    LoadTextureImage("../../data/grass.png", true); //stegossauro
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
     ObjModel rexmodel("../../data/T-Rex_Model.obj");
     ComputeNormals(&rexmodel);
     BuildTrianglesAndAddToVirtualScene(&rexmodel);
 
-    ObjModel bunnymodel("../../data/bunny.obj");
-    ComputeNormals(&bunnymodel);
-    BuildTrianglesAndAddToVirtualScene(&bunnymodel);
+    ObjModel planemodel("../../data/plane.obj");
+    ComputeNormals(&planemodel);
+    BuildTrianglesAndAddToVirtualScene(&planemodel);
 
     ObjModel treemodel("../../data/tree/MapleTree.obj");
     ComputeNormals(&treemodel);
@@ -232,9 +237,13 @@ int main(int argc, char* argv[])
     ComputeNormals(&leavesmodel);
     BuildTrianglesAndAddToVirtualScene(&leavesmodel);
 
-    ObjModel dilomodel("../../data/dilo/dilophosaurus.obj");
-    ComputeNormals(&dilomodel);
-    BuildTrianglesAndAddToVirtualScene(&dilomodel);
+    ObjModel stegmodel("../../data/steg/STEGOSRS.obj");
+    ComputeNormals(&stegmodel);
+    BuildTrianglesAndAddToVirtualScene(&stegmodel);
+
+    ObjModel bunnymodel("../../data/bunny.obj");
+    ComputeNormals(&bunnymodel);
+    BuildTrianglesAndAddToVirtualScene(&bunnymodel);
 
     if ( argc > 1 )
     {
@@ -256,11 +265,8 @@ int main(int argc, char* argv[])
     // Inicializamos o código para renderização de texto.
     TextRendering_Init();
 
-    GLint model_uniform           = glGetUniformLocation(g_GpuProgramID, "model"); // Variável da matriz "model"
-    GLint view_uniform            = glGetUniformLocation(g_GpuProgramID, "view"); // Variável da matriz "view" em shader_vertex.glsl
-    GLint projection_uniform      = glGetUniformLocation(g_GpuProgramID, "projection"); // Variável da matriz "projection" em shader_vertex.glsl
-    GLint render_as_black_uniform = glGetUniformLocation(g_GpuProgramID, "render_as_black"); // Variável booleana em shader_vertex.glsl
-    g_object_id_uniform = glGetUniformLocation(g_GpuProgramID, "object_id"); // Variável booleana em shader_vertex.glsl
+
+    GLint g_render_as_black_uniform = glGetUniformLocation(g_GpuProgramID, "render_as_black"); // Variável booleana em shader_vertex.glsl
 
 
     glEnable(GL_DEPTH_TEST);
@@ -317,25 +323,26 @@ int main(int argc, char* argv[])
 
         glm::mat4 model = Matrix_Identity(); // Transformação identidade de modelagem
 
-        glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(g_view_uniform, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(g_projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //achar textureImage lab 5
         #define REX 0
-        #define BUNNY 1
-        #define TREE 3
-        #define FOLHAS 4
-        #define DILO 5
+        #define PLANE 1
+        #define TREE 2
+        #define FOLHAS 3
+        #define STEG 4
+        #define BUNNY 5
 
         //Desenho do carro de f1(agora cubo)
 
-        glUniform1i(render_as_black_uniform, false);
+        glUniform1i(g_render_as_black_uniform, false);
         model = carro.ModelMatrix();
 
-        glUniformMatrix4fv(model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
+        glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, REX);
         DrawVirtualObject("META");
         DrawVirtualObject("METAojo");
@@ -345,24 +352,18 @@ int main(int argc, char* argv[])
 
         model = Matrix_Scale(0.01f, 0.01f, 0.01f)
          * Matrix_Translate(0.0f,160.0f,0.0f)
-         //* Matrix_Rotate_Y(-girar)
+         // Matrix_Rotate_Z(3.141/2.0)
          * Matrix_Translate(bezier_pos.x, bezier_pos.y + 0.5f, bezier_pos.z)
          * Matrix_Scale(70.0f,70.0f,70.0f);
-        glUniformMatrix4fv(model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
-        glUniform1i(g_object_id_uniform, DILO);
-        DrawVirtualObject("Cylinder.004");
-        DrawVirtualObject("Cylinder.003");
-        DrawVirtualObject("Cylinder.002");
-        DrawVirtualObject("Cylinder.001");
-        DrawVirtualObject("Cylinder.000");
-        DrawVirtualObject("Cylinder.027");
-
-
-
+        glUniformMatrix4fv(g_model_uniform, 1 , GL_FALSE , glm::value_ptr(model));
+        glUniform1i(g_object_id_uniform, STEG);
+        DrawVirtualObject("stego_body");
+        DrawVirtualObject("stego_iris");
+        DrawVirtualObject("stego_eye");
 
 
         model = Matrix_Scale(1.0f, 1.0f, 1.0f) * Matrix_Translate(10.0f, 1.0f, 0.0f);
-        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, BUNNY);
         DrawVirtualObject("the_bunny");
 
@@ -370,22 +371,22 @@ int main(int argc, char* argv[])
             for(float j = -550.0f; j <= 450.00f; j += 100.0f){
 
                 model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
-                glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
                 glUniform1i(g_object_id_uniform, TREE);
                 DrawVirtualObject("tree_Mesh");
-
-                model = Matrix_Scale(0.4f, 0.4f, 0.4f) * Matrix_Translate(i, 0.0f, j);
-                glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                glUniform1i(g_object_id_uniform, FOLHAS);
                 DrawVirtualObject("leaves");
+                DrawVirtualObject("leaves_001");
+
             }
 
         }
 
+        model = Matrix_Scale(1000.0f, 1000.0f, 1000.0f);
+        glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform1i(g_object_id_uniform, PLANE);
+        DrawVirtualObject("the_plane");
 
-        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(g_object_id_uniform, 1);
-        desenhaMapa(model_uniform);
+
 
 
 //---------------------------------------------------------------------------
@@ -502,6 +503,24 @@ void LoadShader(const char* filename, GLuint shader_id)
 
 void LoadShadersFromFiles()
 {
+    // Note que o caminho para os arquivos "shader_vertex.glsl" e
+    // "shader_fragment.glsl" estão fixados, sendo que assumimos a existência
+    // da seguinte estrutura no sistema de arquivos:
+    //
+    //    + FCG_Lab_01/
+    //    |
+    //    +--+ bin/
+    //    |  |
+    //    |  +--+ Release/  (ou Debug/ ou Linux/)
+    //    |     |
+    //    |     o-- main.exe
+    //    |
+    //    +--+ src/
+    //       |
+    //       o-- shader_vertex.glsl
+    //       |
+    //       o-- shader_fragment.glsl
+    //
     GLuint vertex_shader_id = LoadShader_Vertex("../../src/shader_vertex.glsl");
     GLuint fragment_shader_id = LoadShader_Fragment("../../src/shader_fragment.glsl");
 
@@ -511,6 +530,27 @@ void LoadShadersFromFiles()
 
     // Criamos um programa de GPU utilizando os shaders carregados acima.
     g_GpuProgramID = CreateGpuProgram(vertex_shader_id, fragment_shader_id);
+
+    // Buscamos o endereço das variáveis definidas dentro do Vertex Shader.
+    // Utilizaremos estas variáveis para enviar dados para a placa de vídeo
+    // (GPU)! Veja arquivo "shader_vertex.glsl" e "shader_fragment.glsl".
+    g_model_uniform      = glGetUniformLocation(g_GpuProgramID, "model"); // Variável da matriz "model"
+    g_view_uniform       = glGetUniformLocation(g_GpuProgramID, "view"); // Variável da matriz "view" em shader_vertex.glsl
+    g_projection_uniform = glGetUniformLocation(g_GpuProgramID, "projection"); // Variável da matriz "projection" em shader_vertex.glsl
+    g_object_id_uniform  = glGetUniformLocation(g_GpuProgramID, "object_id"); // Variável "object_id" em shader_fragment.glsl
+    g_bbox_min_uniform   = glGetUniformLocation(g_GpuProgramID, "bbox_min");
+    g_bbox_max_uniform   = glGetUniformLocation(g_GpuProgramID, "bbox_max");
+
+    // Variáveis em "shader_fragment.glsl" para acesso das imagens de textura
+    glUseProgram(g_GpuProgramID);
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage0"), 0); //rex
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage1"), 1); //rex2
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage2"), 2); //arvore
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage3"), 3); //folhas
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage4"), 4); //steg
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage5"), 5); //grass
+
+    glUseProgram(0);
 }
 
 // Esta função cria um programa de GPU, o qual contém obrigatoriamente um
@@ -642,7 +682,7 @@ void TextRendering_ShowSpeed(GLFWwindow* window)
 }
 
 // Função que carrega uma imagem para ser utilizada como textura
-void LoadTextureImage(const char* filename)
+void LoadTextureImage(const char* filename, bool repeat)
 {
     printf("Carregando imagem \"%s\"... ", filename);
 
@@ -667,9 +707,17 @@ void LoadTextureImage(const char* filename)
     glGenTextures(1, &texture_id);
     glGenSamplers(1, &sampler_id);
 
-    // Veja slides 95-96 do documento Aula_20_Mapeamento_de_Texturas.pdf
-    glSamplerParameteri(sampler_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glSamplerParameteri(sampler_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    if (repeat)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    }
+    else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
 
     // Parâmetros de amostragem da textura.
     glSamplerParameteri(sampler_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -933,4 +981,22 @@ void DrawVirtualObject(const char* object_name)
     glBindVertexArray(0);
 }
 
+// Função que pega a matriz M e guarda a mesma no topo da pilha
+void PushMatrix(glm::mat4 M)
+{
+    g_MatrixStack.push(M);
+}
 
+// Função que remove a matriz atualmente no topo da pilha e armazena a mesma na variável M
+void PopMatrix(glm::mat4& M)
+{
+    if ( g_MatrixStack.empty() )
+    {
+        M = Matrix_Identity();
+    }
+    else
+    {
+        M = g_MatrixStack.top();
+        g_MatrixStack.pop();
+    }
+}

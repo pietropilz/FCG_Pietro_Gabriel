@@ -26,7 +26,7 @@ public:
         return Matrix_Translate(posicao[0], posicao[1]-0.80f, posicao[2]) *
                Matrix_Rotate_Y(3*pi/2)*
                Matrix_Rotate_Y(angulo)*
-               Matrix_Translate(0.0f,0.0f,3.0f)* //mudar o 3.0
+               Matrix_Translate(1.0f,0.0f,-1.45f)*
                Matrix_Scale(0.01f, 0.01f, 0.01f);
 
     }
