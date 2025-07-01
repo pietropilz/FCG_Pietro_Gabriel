@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <matrices.h>
 
+const float pi = 3.1415926f;
 class Carro
 {
 public:
@@ -12,7 +13,6 @@ public:
     float velocidade;
     float angulo;
     glm::mat4 model;
-    float pi = 3.1415926f;
 
     Carro()
     {
@@ -24,11 +24,9 @@ public:
 
      glm::mat4 ModelMatrix() const {
         return Matrix_Translate(posicao[0], posicao[1]-0.80f, posicao[2]) *
-               Matrix_Rotate_Y(3*pi/2)*
-               Matrix_Rotate_Y(angulo)*
-               Matrix_Translate(1.0f,0.0f,-1.45f)*
+               Matrix_Rotate_Y(angulo + 3.0f*pi/2.0f)*
+               Matrix_Translate(-1.0f,0.0f,-1.45f)*
                Matrix_Scale(0.01f, 0.01f, 0.01f);
-
     }
 
 

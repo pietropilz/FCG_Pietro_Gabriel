@@ -353,10 +353,9 @@ int main(int argc, char* argv[])
         DrawVirtualObject("UNAS");;
 
 
-        model = Matrix_Scale(0.01f, 0.01f, 0.01f)
-                * Matrix_Translate(bezier_pos.x, bezier_pos.y + 100.0f, bezier_pos.z)
-                * Matrix_Scale(70.0f,70.0f,70.0f)
-                * Matrix_Rotate_Y(-angle_stego + PI/2.0f);
+        model =   Matrix_Translate(bezier_pos.x, bezier_pos.y, bezier_pos.z)
+                * Matrix_Rotate_Y(-angle_stego + PI/2.0f)
+                * Matrix_Scale(1.0f, 1.0f, 1.0f);
 
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, STEG);
@@ -372,9 +371,9 @@ int main(int argc, char* argv[])
 
         camera_view_vector = camera_view_vector/norm(camera_view_vector);
 
-        for(float i = -200.0f; i <= 200.00f; i += 40.0f)
+        for(float i = -200.0f; i <= 200.00f; i += 35.0f)
         {
-            for(float j = -200.0f; j <= 200.00f; j += 40.0f)
+            for(float j = -200.0f; j <= 200.00f; j += 35.0f)
             {
                 glm::vec4 arvore = glm::vec4(i, 0.0f, j, 1.0f);
                 glm::vec4 auxiliar = arvore - camera_position_c;

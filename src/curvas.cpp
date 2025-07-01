@@ -1,7 +1,7 @@
 #include "../include/curvas.h"
 #include "../include/matrices.h"
 
-#define RAIO 500.0
+#define RAIO 10.0
 #define CENTRO_X 0.0
 #define CENTRO_Z  0.0
 

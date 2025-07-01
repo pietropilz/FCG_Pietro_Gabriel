@@ -3175,7 +3175,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1750621637 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
+1750637587 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
 	"../include/camera.h"
 	"../include/matrices.h"
 	"carro.h"
@@ -3187,7 +3187,7 @@
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
 
-1750621637 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\carro.h
+1750637742 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\carro.h
 	<glm/glm.hpp>
 	<matrices.h>
 
@@ -3913,7 +3913,7 @@
 	<GL/gl.h>
 	<GL/glext.h>
 
-1750626186 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\curvas.cpp
+1750637164 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\curvas.cpp
 	"../include/curvas.h"
 	"../include/matrices.h"
 
@@ -4150,7 +4150,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1750627533 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
+1750637705 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>

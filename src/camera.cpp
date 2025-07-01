@@ -18,6 +18,7 @@ void atualiza_lookCamera(glm::vec4& cam_position, glm::vec4& cam_vector, Carro c
 
     glm::vec4 obj_pos = carro.posicao - vetor*0.5f;
 
+
     cam_position = obj_pos - cam_vector * DISTANCIA + glm::vec4(0.0f, ALTURA, 0.0f, 0.0f);
     glm::vec4 aux = obj_pos - cam_position;
     cam_vector = aux/norm(aux);
