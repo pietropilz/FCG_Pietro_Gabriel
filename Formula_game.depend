@@ -4150,10 +4150,11 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751417519 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
+1751482559 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
+	<iostream>
 	<map>
 	<stack>
 	<string>
@@ -4246,31 +4247,31 @@
 	<stddef.h>
 	<stdint.h>
 
-1751417453 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
+1751482620 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
 	"../include/colisions.h"
-	<algorithm>
-	<vector>
+	<utility>
 	<iterator>
 
-1751415684 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
-	<cmath>
+1751481727 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
 	<vector>
-	<map>
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
 	"Arvores.h"
 	"dino.h"
+	"matrices.h"
 
-1751414964 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\dino.h
+1751476941 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\dino.h
 	<glm/glm.hpp>
 	<matrices.h>
 
-1751417232 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\arvores.h
+1751478570 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\arvores.h
 	<cmath>
 	<vector>
-	<map>
+	<algorithm>
+	<utility>
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
+	"matrices.h"
 

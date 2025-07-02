@@ -1,9 +1,7 @@
 #ifndef _COLISIONS_H
 #define _COLISIONS_H
 
-#include <cmath>
 #include <vector>
-#include <map>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
@@ -11,9 +9,10 @@
 
 #include "Arvores.h"
 #include "dino.h"
+#include "matrices.h"
 
 
-void colisao_arvores(Arvores& arvores, const Dino& dino);
+bool colisao_arvores(Arvores& arvores, const Dino& dino);
 
 
 

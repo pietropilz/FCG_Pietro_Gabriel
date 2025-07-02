@@ -13,6 +13,8 @@ public:
     float velocidade;
     float angulo;
     glm::mat4 model;
+    glm::vec4 bbox_min;
+    glm::vec4 bbox_max;
 
     Dino()
     {

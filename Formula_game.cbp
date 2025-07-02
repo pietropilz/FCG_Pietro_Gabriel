@@ -109,7 +109,6 @@
 		<Unit filename="include/curvas.h" />
 		<Unit filename="include/dejavufont.h" />
 		<Unit filename="include/dino.h" />
-		<Unit filename="include/draws.h" />
 		<Unit filename="include/glad/glad.h" />
 		<Unit filename="include/glm/CMakeLists.txt" />
 		<Unit filename="include/glm/common.hpp" />
@@ -382,7 +381,6 @@
 		<Unit filename="src/camera.cpp" />
 		<Unit filename="src/colisions.cpp" />
 		<Unit filename="src/curvas.cpp" />
-		<Unit filename="src/draws.cpp" />
 		<Unit filename="src/glad.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/matrices.cpp" />

@@ -1,6 +1,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 // Headers abaixo são específicos de C++
 #include <map>
@@ -262,9 +263,6 @@ int main(int argc, char* argv[])
     //glCullFace(GL_BACK);
     //glFrontFace(GL_CCW);
 
-    GLuint vertex_array_cube = BuildCube();
-    inicializaMapa();
-
     // Inicializamos o código para renderização de texto.
     TextRendering_Init();
 
@@ -281,6 +279,17 @@ int main(int argc, char* argv[])
     float girar;
 
     Arvores arvores_mapa = Arvores();
+    arvores_mapa.bbox_min = glm::vec4(g_VirtualScene["tree_Mesh"].bbox_min, 1.0f);
+    arvores_mapa.bbox_max = glm::vec4(g_VirtualScene["tree_Mesh"].bbox_max, 1.0f);
+
+    dino.bbox_max = glm::vec4(g_VirtualScene["META"].bbox_max, 1.0f);
+    dino.bbox_min = glm::vec4(g_VirtualScene["META"].bbox_min, 1.0f);
+
+    std::cout << "Tronco maior : " << arvores_mapa.bbox_max[0] << " " << arvores_mapa.bbox_max[1] << " " << arvores_mapa.bbox_max[2] << std::endl;
+    std::cout << "Tronco menor : " << arvores_mapa.bbox_min[0] << " " << arvores_mapa.bbox_min[1] << " " << arvores_mapa.bbox_min[2] << std::endl;
+
+    std::cout << "Dino maior : " << dino.bbox_max[0] << " " << dino.bbox_max[1] << " " << dino.bbox_max[2] << std::endl;
+    std::cout << "Dino menor : " << dino.bbox_min[0] << " " << dino.bbox_min[1] << " " << dino.bbox_min[2] << std::endl;
 
     // Ficamos em um loop infinito, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
@@ -301,7 +310,18 @@ int main(int argc, char* argv[])
         prev_time = current_time;
 
         //Função do arquivo "moving.h". Faz a movimentação do dino!
+        glm::vec4 dinoPos_aux = dino.posicao;
+        glm::vec4 dinoVet_aux = dino.vetor;
+        float dinoAng_aux = dino.angulo;
+
         desloca(dino.posicao, dino.vetor, dino.angulo, delta_t);
+
+        if(colisao_arvores(arvores_mapa, dino)){
+            dino.posicao = dinoPos_aux;
+            //dino.vetor = dinoVet_aux;
+            //dino.angulo = dinoAng_aux;
+            dino.velocidade = 0.0f;
+        }
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
         float angle_stego;
@@ -375,14 +395,11 @@ int main(int argc, char* argv[])
 
         camera_view_vector = camera_view_vector/norm(camera_view_vector);
 
-        colisao_arvores(arvores_mapa, dino);
 
 
         for(int arvore_pos = 0; arvore_pos < arvores_mapa.n; arvore_pos++)
         {
             glm::vec4 arvore = arvores_mapa.pos[arvore_pos];
-            float i = arvore[0];
-            float j = arvore[2];
 
             glm::vec4 auxiliar = arvore - camera_position_c;
             float distancia = norm(auxiliar);
@@ -391,7 +408,7 @@ int main(int argc, char* argv[])
             if(((dotproduct(vetor_aux, camera_view_vector) >= 0.5f) && distancia < 200.0f) || distancia < 15.0f)
             {
                 if(arvores_mapa.existe[arvore_pos]){
-                model = Matrix_Translate(i, 0.0f, j) * Matrix_Scale(0.4f, 0.4f, 0.4f);
+                model = arvores_mapa.ModelMatrix(arvore_pos);
                 glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
                 glUniform1i(g_object_id_uniform, TREE);
                 DrawVirtualObject("tree_Mesh");
