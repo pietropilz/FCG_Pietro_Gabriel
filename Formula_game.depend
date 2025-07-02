@@ -3175,14 +3175,14 @@
 	<windows.h>
 	<dlfcn.h>
 
-1750637587 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
+1751414834 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
 	"../include/camera.h"
 	"../include/matrices.h"
-	"carro.h"
+	"dino.h"
 
-1750074562 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\camera.h
+1751414974 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\camera.h
 	<cmath>
-	"carro.h"
+	"dino.h"
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
@@ -4150,7 +4150,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1750637705 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
+1751417519 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -4177,7 +4177,9 @@
 	"moving.h"
 	"camera.h"
 	"curvas.h"
-	"carro.h"
+	"dino.h"
+	"Arvores.h"
+	"colisions.h"
 
 1750074161 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\stb_image.h
 	"stb_image.h"
@@ -4219,16 +4221,16 @@
 1750074161 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\scene.h
 	<GLFW/glfw3.h>
 
-1750074592 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\moving.h
+1751414974 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\moving.h
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
-	"carro.h"
+	"dino.h"
 
 1750074162 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\matrices.cpp
 	"../include/matrices.h"
 
-1750621637 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\moving.cpp
+1751414974 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\moving.cpp
 	"../include/moving.h"
 
 1750074162 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\textrendering.cpp
@@ -4243,4 +4245,32 @@
 1750074161 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\dejavufont.h
 	<stddef.h>
 	<stdint.h>
+
+1751417453 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
+	"../include/colisions.h"
+	<algorithm>
+	<vector>
+	<iterator>
+
+1751415684 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
+	<cmath>
+	<vector>
+	<map>
+	<glm/mat4x4.hpp>
+	<glm/vec4.hpp>
+	<GLFW/glfw3.h>
+	"Arvores.h"
+	"dino.h"
+
+1751414964 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\dino.h
+	<glm/glm.hpp>
+	<matrices.h>
+
+1751417232 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\arvores.h
+	<cmath>
+	<vector>
+	<map>
+	<glm/mat4x4.hpp>
+	<glm/vec4.hpp>
+	<GLFW/glfw3.h>
 

@@ -36,7 +36,9 @@
 #include "moving.h"
 #include "camera.h"
 #include "curvas.h"
-#include "carro.h"
+#include "dino.h"
+#include "Arvores.h"
+#include "colisions.h"
 
 #define PI 3.1415926
 #define FARPLANE 200.0f
@@ -164,7 +166,7 @@ GLint g_bbox_max_uniform;
 // Número de texturas carregadas pela função LoadTextureImage()
 GLuint g_NumLoadedTextures = 0;
 
-Carro carro;
+Dino dino;
 
 int main(int argc, char* argv[])
 {
@@ -278,6 +280,8 @@ int main(int argc, char* argv[])
 
     float girar;
 
+    Arvores arvores_mapa = Arvores();
+
     // Ficamos em um loop infinito, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
     {
@@ -296,8 +300,8 @@ int main(int argc, char* argv[])
         float delta_t = current_time - prev_time;
         prev_time = current_time;
 
-        //Função do arquivo "moving.h". Faz a movimentação do carro!
-        desloca(carro.posicao, carro.vetor, carro.angulo, delta_t);
+        //Função do arquivo "moving.h". Faz a movimentação do dino!
+        desloca(dino.posicao, dino.vetor, dino.angulo, delta_t);
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
         float angle_stego;
@@ -307,15 +311,15 @@ int main(int argc, char* argv[])
         //------------------------------------------------------------------------------------------
         //movimentação da camera
         //funções na camera.h
-        camera_view_vector = carro.vetor;
+        camera_view_vector = dino.vetor;
         camera_up_vector = glm::vec4(0.0f,1.0f,0.0f,0.0f); // Vetor "up" fixado para apontar para o "céu" (eito Y global)
         if(!freeCamera)
         {
-            atualiza_lookCamera(camera_position_c, camera_view_vector, carro);
+            atualiza_lookCamera(camera_position_c, camera_view_vector, dino);
         }
         else
         {
-            atualiza_freeCamera(camera_position_c, camera_view_vector, carro.posicao);
+            atualiza_freeCamera(camera_position_c, camera_view_vector, dino.posicao);
         }
 
 
@@ -343,7 +347,7 @@ int main(int argc, char* argv[])
         //Desenho do dinossauro
 
         glUniform1i(g_render_as_black_uniform, false);
-        model = carro.ModelMatrix();
+        model = dino.ModelMatrix();
 
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, REX);
@@ -371,27 +375,30 @@ int main(int argc, char* argv[])
 
         camera_view_vector = camera_view_vector/norm(camera_view_vector);
 
-        for(float i = -200.0f; i <= 200.00f; i += 35.0f)
+        colisao_arvores(arvores_mapa, dino);
+
+
+        for(int arvore_pos = 0; arvore_pos < arvores_mapa.n; arvore_pos++)
         {
-            for(float j = -200.0f; j <= 200.00f; j += 35.0f)
+            glm::vec4 arvore = arvores_mapa.pos[arvore_pos];
+            float i = arvore[0];
+            float j = arvore[2];
+
+            glm::vec4 auxiliar = arvore - camera_position_c;
+            float distancia = norm(auxiliar);
+            glm::vec4 vetor_aux = auxiliar / distancia;
+
+            if(((dotproduct(vetor_aux, camera_view_vector) >= 0.5f) && distancia < 200.0f) || distancia < 15.0f)
             {
-                glm::vec4 arvore = glm::vec4(i, 0.0f, j, 1.0f);
-                glm::vec4 auxiliar = arvore - camera_position_c;
-                float distancia = norm(auxiliar);
-                glm::vec4 vetor_aux = auxiliar / distancia;
-
-                if(((dotproduct(vetor_aux, camera_view_vector) >= 0.5f) && distancia < 200.0f) || distancia < 15.0f)
-                {
-                    model = Matrix_Translate(i, 0.0f, j) * Matrix_Scale(0.4f, 0.4f, 0.4f);
-                    glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                    glUniform1i(g_object_id_uniform, TREE);
-                    DrawVirtualObject("tree_Mesh");
-                    DrawVirtualObject("leaves");
-                    DrawVirtualObject("leaves_001");
+                if(arvores_mapa.existe[arvore_pos]){
+                model = Matrix_Translate(i, 0.0f, j) * Matrix_Scale(0.4f, 0.4f, 0.4f);
+                glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                glUniform1i(g_object_id_uniform, TREE);
+                DrawVirtualObject("tree_Mesh");
+                DrawVirtualObject("leaves");
+                DrawVirtualObject("leaves_001");
                 }
-
             }
-
         }
 
         model = Matrix_Scale(1000.0f, 1000.0f, 1000.0f);
@@ -686,7 +693,7 @@ void TextRendering_ShowSpeed(GLFWwindow* window)
     static int   numchars = 7;
 
 
-    numchars = snprintf(buffer, 20, "%.2f km//h", carro.velocidade*3.6);
+    numchars = snprintf(buffer, 20, "%.2f km//h", dino.velocidade*3.6);
 
     float lineheight = TextRendering_LineHeight(window);
     float charwidth = TextRendering_CharWidth(window);

@@ -1,6 +1,6 @@
 #include "../include/camera.h"
 #include "../include/matrices.h"
-#include "carro.h"
+#include "dino.h"
 
 //Definições de distância da câmera para o objeto e altura da câmera em relação ao solo
 #define DISTANCIA 10.0f
@@ -9,14 +9,14 @@
 #define NEARPLANE 0.1f
 #define FARPLANE 200.0f
 
-void atualiza_lookCamera(glm::vec4& cam_position, glm::vec4& cam_vector, Carro carro)
+void atualiza_lookCamera(glm::vec4& cam_position, glm::vec4& cam_vector, Dino dino)
 {
     constexpr const float distancia_total = std::sqrt(DISTANCIA*DISTANCIA + ALTURA*ALTURA);
     constexpr float inicial_Y = std::acos(ALTURA/distancia_total);
 
-    glm::vec4 vetor = crossproduct(carro.vetor, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    glm::vec4 vetor = crossproduct(dino.vetor, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 
-    glm::vec4 obj_pos = carro.posicao - vetor*0.5f;
+    glm::vec4 obj_pos = dino.posicao - vetor*0.5f;
 
 
     cam_position = obj_pos - cam_vector * DISTANCIA + glm::vec4(0.0f, ALTURA, 0.0f, 0.0f);

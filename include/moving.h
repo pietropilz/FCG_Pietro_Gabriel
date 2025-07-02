@@ -4,9 +4,9 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 #include <GLFW/glfw3.h>
-#include "carro.h"
+#include "dino.h"
 
-extern Carro carro;
+extern Dino dino;
 extern bool freeCamera;
 
 void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float delta_t);

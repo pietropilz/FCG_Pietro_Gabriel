@@ -100,7 +100,7 @@ void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float del
 
     last_speedA = speedA;
     last_speed = speed;
-    carro.velocidade = speed;
+    dino.velocidade = speed;
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
@@ -164,7 +164,7 @@ void CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
     float dx = xpos - g_LastCursorPosX;
     float dy = ypos - g_LastCursorPosY;
 
-    g_Theta = 0.005f*dx;
+    g_Theta = 0.01f*dx;
     g_Phi   = 0.01f*dy;
 
 
