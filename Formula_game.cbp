@@ -109,6 +109,7 @@
 		<Unit filename="include/curvas.h" />
 		<Unit filename="include/dejavufont.h" />
 		<Unit filename="include/dino.h" />
+		<Unit filename="include/estego.h" />
 		<Unit filename="include/glad/glad.h" />
 		<Unit filename="include/glm/CMakeLists.txt" />
 		<Unit filename="include/glm/common.hpp" />

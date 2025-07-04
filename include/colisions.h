@@ -9,10 +9,13 @@
 
 #include "Arvores.h"
 #include "dino.h"
+#include "estego.h"
 #include "matrices.h"
 
 
 bool colisao_arvores(Arvores& arvores, const Dino& dino);
+
+bool colisao_Dinos(const Dino& dino, const Estego& estego);
 
 
 

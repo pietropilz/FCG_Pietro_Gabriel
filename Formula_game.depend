@@ -3913,11 +3913,11 @@
 	<GL/gl.h>
 	<GL/glext.h>
 
-1750637164 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\curvas.cpp
+1751633434 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\curvas.cpp
 	"../include/curvas.h"
 	"../include/matrices.h"
 
-1750625275 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\curvas.h
+1751632981 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\curvas.h
 	<glm/glm.hpp>
 	<cmath>
 
@@ -4150,7 +4150,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751482559 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
+1751634180 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -4164,6 +4164,8 @@
 	<sstream>
 	<stdexcept>
 	<algorithm>
+	<chrono>
+	<random>
 	<glad/glad.h>
 	<GLFW/glfw3.h>
 	<glm/mat4x4.hpp>
@@ -4173,14 +4175,13 @@
 	"tiny_obj_loader.h"
 	"utils.h"
 	"matrices.h"
-	"draws.h"
 	"scene.h"
 	"moving.h"
 	"camera.h"
-	"curvas.h"
 	"dino.h"
 	"Arvores.h"
 	"colisions.h"
+	"estego.h"
 
 1750074161 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\stb_image.h
 	"stb_image.h"
@@ -4247,18 +4248,19 @@
 	<stddef.h>
 	<stdint.h>
 
-1751482620 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
+1751631685 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
 	"../include/colisions.h"
 	<utility>
 	<iterator>
 
-1751481727 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
+1751629534 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
 	<vector>
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
 	"Arvores.h"
 	"dino.h"
+	"estego.h"
 	"matrices.h"
 
 1751476941 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\dino.h
@@ -4274,4 +4276,11 @@
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
 	"matrices.h"
+
+1751634242 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\estego.h
+	<glm/mat4x4.hpp>
+	<glm/vec4.hpp>
+	<GLFW/glfw3.h>
+	"matrices.h"
+	"curvas.h"
 

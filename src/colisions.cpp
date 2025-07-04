@@ -57,7 +57,6 @@ bool colisao_arvores(Arvores& arvores, const Dino& dino)
     return colisaoCilindroPonto(arvores,dino, ids_colisao);
 }
 
-
 bool entre_retasperpendiculares(glm::vec4 reta1, glm::vec4 reta2, glm::vec4 ponto){
 
     float valor1 = reta1[0]*ponto[0] + reta1[2]*ponto[2];
@@ -89,4 +88,53 @@ bool colisaoCilindroPonto(const Arvores& arvores, const Dino& dino, std::vector<
         if(teste1 && teste2) return true;
     }
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------------------
+struct AABB_Global {
+    glm::vec4 min;
+    glm::vec4 max;
+};
+
+AABB_Global calcularAABBGlobal(const glm::vec4& local_min, const glm::vec4& local_max, const glm::mat4& modelMatrix)
+{
+        glm::vec4 cantos[8] = {
+        glm::vec4(local_min.x, local_min.y, local_min.z, 1.0f),
+        glm::vec4(local_max.x, local_min.y, local_min.z, 1.0f),
+        glm::vec4(local_max.x, local_max.y, local_min.z, 1.0f),
+        glm::vec4(local_min.x, local_max.y, local_min.z, 1.0f),
+        glm::vec4(local_min.x, local_min.y, local_max.z, 1.0f),
+        glm::vec4(local_max.x, local_min.y, local_max.z, 1.0f),
+        glm::vec4(local_max.x, local_max.y, local_max.z, 1.0f),
+        glm::vec4(local_min.x, local_max.y, local_max.z, 1.0f)
+    };
+
+    glm::vec4 primeiroCantoTransformado = modelMatrix * cantos[0];
+    AABB_Global globalAABB = { primeiroCantoTransformado, primeiroCantoTransformado };
+
+
+    for (int i = 1; i < 8; ++i) {
+        glm::vec4 cantoTransformado = modelMatrix * cantos[i];
+
+        // glm::min e glm::max fazem a comparação por componente
+        globalAABB.min = glm::min(globalAABB.min, cantoTransformado);
+        globalAABB.max = glm::max(globalAABB.max, cantoTransformado);
+    }
+
+    return globalAABB;
+}
+
+bool colisaoCubos(const glm::vec4& aM, const glm::vec4& am, const glm::vec4& bM, const glm::vec4& bm) {
+    return (aM.x >= bm.x && am.x <= bM.x) &&
+           (aM.y >= bm.y && am.y <= bM.y) &&
+           (aM.z >= bm.z && am.z <= bM.z);
+}
+
+bool colisao_Dinos(const Dino& dino, const Estego& estego)
+{
+    AABB_Global dinoGlobalAABB = calcularAABBGlobal(dino.bbox_min, dino.bbox_max, dino.ModelMatrix());
+
+    AABB_Global estegoGlobalAABB = calcularAABBGlobal(estego.bbox_min, estego.bbox_max, estego.ModelMatrix());
+
+    return colisaoCubos(dinoGlobalAABB.max, dinoGlobalAABB.min, estegoGlobalAABB.max, estegoGlobalAABB.min);
 }

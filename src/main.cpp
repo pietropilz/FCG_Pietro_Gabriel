@@ -13,6 +13,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <chrono>
+#include <random>
 
 // Headers das bibliotecas OpenGL
 #include <glad/glad.h>   // Criação de contexto OpenGL 3.3
@@ -32,14 +34,13 @@
 // Headers locais, definidos na pasta "include/"
 #include "utils.h"
 #include "matrices.h"
-#include "draws.h"
 #include "scene.h"
 #include "moving.h"
 #include "camera.h"
-#include "curvas.h"
 #include "dino.h"
 #include "Arvores.h"
 #include "colisions.h"
+#include "estego.h"
 
 #define PI 3.1415926
 #define FARPLANE 200.0f
@@ -267,20 +268,26 @@ int main(int argc, char* argv[])
     TextRendering_Init();
 
 
+
     GLint g_render_as_black_uniform = glGetUniformLocation(g_GpuProgramID, "render_as_black"); // Variável booleana em shader_vertex.glsl
 
 
     glEnable(GL_DEPTH_TEST);
-    glm::vec4 bezier_pos = glm::vec4(0.0f,0.0f, 0.0f,1.0f);
-
 
     float prev_time = (float)glfwGetTime();
-
-    float girar;
 
     Arvores arvores_mapa = Arvores();
     arvores_mapa.bbox_min = glm::vec4(g_VirtualScene["tree_Mesh"].bbox_min, 1.0f);
     arvores_mapa.bbox_max = glm::vec4(g_VirtualScene["tree_Mesh"].bbox_max, 1.0f);
+
+    unsigned seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::mt19937 gerador(seed);
+    std::uniform_int_distribution<int> distribuicao(0, arvores_mapa.n - 1);
+
+    Estego estego = Estego();
+    estego.bbox_max = glm::vec4(g_VirtualScene["stego_body"].bbox_max, 1.0f);
+    estego.bbox_min = glm::vec4(g_VirtualScene["stego_body"].bbox_min, 1.0f);
+
 
     dino.bbox_max = glm::vec4(g_VirtualScene["META"].bbox_max, 1.0f);
     dino.bbox_min = glm::vec4(g_VirtualScene["META"].bbox_min, 1.0f);
@@ -324,10 +331,15 @@ int main(int argc, char* argv[])
         }
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
-        float angle_stego;
-        curva_circulo(current_time, bezier_pos, angle_stego);
-        girar = (girar + delta_t);
-        if (girar > 2*PI)girar = 0;
+        estego.bezier(current_time);
+
+        if(colisao_Dinos(dino, estego)){
+            int numero_aleatorio = distribuicao(gerador);
+            glm::vec4 posRandom = arvores_mapa.pos[numero_aleatorio];
+            estego.novaPos(posRandom);
+        }
+
+
         //------------------------------------------------------------------------------------------
         //movimentação da camera
         //funções na camera.h
@@ -377,9 +389,7 @@ int main(int argc, char* argv[])
         DrawVirtualObject("UNAS");;
 
 
-        model =   Matrix_Translate(bezier_pos.x, bezier_pos.y, bezier_pos.z)
-                * Matrix_Rotate_Y(-angle_stego + PI/2.0f)
-                * Matrix_Scale(1.0f, 1.0f, 1.0f);
+        model =   estego.ModelMatrix();
 
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, STEG);
