@@ -30,6 +30,7 @@ uniform mat4 projection;
 #define TREE 2
 #define FOLHAS 3
 #define STEG 4
+#define SPHERE 5
 
 uniform int object_id;
 
@@ -44,6 +45,7 @@ uniform sampler2D TextureImage2; //tronco
 uniform sampler2D TextureImage3; //folhas
 uniform sampler2D TextureImage4; //steg
 uniform sampler2D TextureImage5; //grass
+uniform sampler2D TextureImage6; //sky
 
 
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
@@ -166,7 +168,6 @@ void main()
         float y = position_model.y;
         float z = position_model.z;
 
-        U = (x - minx) / (maxx - minx);
         V = (y - miny) / (maxy - miny);
         W = (z - minz) / (maxz - minz);
 
@@ -203,6 +204,25 @@ void main()
         float lambert = max(0,dot(n,l));
 
         color.rgb = Kd0 * (lambert + 0.5);
+    }else if( object_id == SPHERE ){
+        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float x = position_model.x;
+        float y = position_model.y;
+
+        U = (x - minx) / (maxx - minx);
+        V = (y - miny) / (maxy - miny);
+
+        vec3 Kd0 = texture(TextureImage6, vec2(U,V)).rgb;
+        // Equação de Iluminação
+        float lambert = max(0,dot(n,l));
+
+        color.rgb = Kd0;
     }else{
         //discard;
         //color = cor_interpolada_pelo_rasterizador;

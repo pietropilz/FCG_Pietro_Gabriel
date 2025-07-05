@@ -224,6 +224,7 @@ int main(int argc, char* argv[])
     LoadTextureImage("../../data/tree/maple_leaf.png", false); //folhas
     LoadTextureImage("../../data/steg/STEGOSRS_1.png", false); //stegossauro
     LoadTextureImage("../../data/grass.png", true); //stegossauro
+    LoadTextureImage("../../data/ceu.jpg", false); //ceu
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
     ObjModel rexmodel("../../data/T-Rex_Model.obj");
@@ -246,9 +247,9 @@ int main(int argc, char* argv[])
     ComputeNormals(&stegmodel);
     BuildTrianglesAndAddToVirtualScene(&stegmodel);
 
-    ObjModel bunnymodel("../../data/bunny.obj");
-    ComputeNormals(&bunnymodel);
-    BuildTrianglesAndAddToVirtualScene(&bunnymodel);
+    ObjModel spheremodel("../../data/sphere.obj");
+    ComputeNormals(&spheremodel);
+    BuildTrianglesAndAddToVirtualScene(&spheremodel);
 
     if ( argc > 1 )
     {
@@ -374,7 +375,7 @@ int main(int argc, char* argv[])
 #define TREE 2
 #define FOLHAS 3
 #define STEG 4
-#define BUNNY 5
+#define SPHERE 5
 
         //Desenho do dinossauro
 
@@ -398,10 +399,10 @@ int main(int argc, char* argv[])
         DrawVirtualObject("stego_eye");
 
 
-        model = Matrix_Scale(1.0f, 1.0f, 1.0f) * Matrix_Translate(10.0f, 1.0f, 0.0f);
+        model = dino.ModelMatrix() * Matrix_Scale(20000.0f, 20000.0f, 20000.0f);
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(g_object_id_uniform, BUNNY);
-        DrawVirtualObject("the_bunny");
+        glUniform1i(g_object_id_uniform, SPHERE);
+        DrawVirtualObject("Icosphere");
 
         camera_view_vector = camera_view_vector/norm(camera_view_vector);
 
@@ -423,7 +424,7 @@ int main(int argc, char* argv[])
                 glUniform1i(g_object_id_uniform, TREE);
                 DrawVirtualObject("tree_Mesh");
                 DrawVirtualObject("leaves");
-                DrawVirtualObject("leaves_001");
+                //DrawVirtualObject("leaves_001");
                 }
             }
         }
@@ -596,6 +597,7 @@ void LoadShadersFromFiles()
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage3"), 3); //folhas
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage4"), 4); //steg
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage5"), 5); //grass
+    glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage6"), 6); //sky
 
     glUseProgram(0);
 }
