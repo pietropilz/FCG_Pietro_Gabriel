@@ -299,6 +299,13 @@ int main(int argc, char* argv[])
     std::cout << "Dino maior : " << dino.bbox_max[0] << " " << dino.bbox_max[1] << " " << dino.bbox_max[2] << std::endl;
     std::cout << "Dino menor : " << dino.bbox_min[0] << " " << dino.bbox_min[1] << " " << dino.bbox_min[2] << std::endl;
 
+    glm::vec4 ceo = glm::vec4(g_VirtualScene["Icosphere"].bbox_max,1.0f);
+    std::cout << "Plano maior: " << ceo[0] << " " << ceo[1] << " " << ceo[2] << std::endl;
+
+
+    glm::vec4 cei = glm::vec4(g_VirtualScene["Icosphere"].bbox_min,1.0f);
+    std::cout << "Plano menor: " << cei[0] << " " << cei[1] << " " << cei[2] << std::endl;
+
     // Ficamos em um loop infinito, renderizando, até que o usuário feche a janela
     while (!glfwWindowShouldClose(window))
     {
@@ -325,10 +332,7 @@ int main(int argc, char* argv[])
         desloca(dino.posicao, dino.vetor, dino.angulo, delta_t);
 
         if(colisao_arvores(arvores_mapa, dino)){
-            dino.posicao = dinoPos_aux;
-            //dino.vetor = dinoVet_aux;
-            //dino.angulo = dinoAng_aux;
-            dino.velocidade = 0.0f;
+            avaliaColisao(dinoVet_aux, dinoPos_aux, dinoAng_aux, dino);
         }
 
         //Função do arquivo "curvas.h". Implementa objeto com bezier
@@ -399,7 +403,8 @@ int main(int argc, char* argv[])
         DrawVirtualObject("stego_eye");
 
 
-        model = dino.ModelMatrix() * Matrix_Scale(20000.0f, 20000.0f, 20000.0f);
+        model = Matrix_Translate(camera_position_c[0], 0.0f, camera_position_c[2])
+                * Matrix_Scale(400.0f, 400.0f, 400.0f);
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, SPHERE);
         DrawVirtualObject("Icosphere");

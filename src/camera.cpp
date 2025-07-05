@@ -7,7 +7,7 @@
 #define ALTURA 5.0f
 
 #define NEARPLANE 0.1f
-#define FARPLANE 200.0f
+#define FARPLANE 400.0f
 
 void atualiza_lookCamera(glm::vec4& cam_position, glm::vec4& cam_vector, Dino dino)
 {
@@ -25,8 +25,8 @@ void atualiza_lookCamera(glm::vec4& cam_position, glm::vec4& cam_vector, Dino di
 }
 
 void atualiza_freeCamera(glm::vec4& cam_position, const glm::vec4& cam_vector, const glm::vec4& obj_pos){
-    cam_position = obj_pos + cam_vector;
-    cam_position.y += 1.0f;
+    cam_position = obj_pos + cam_vector*3.0f;
+    cam_position.y += 3.0f;
 }
 
 

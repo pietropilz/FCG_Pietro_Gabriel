@@ -3180,7 +3180,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751414834 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
+1751729061 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\camera.cpp
 	"../include/camera.h"
 	"../include/matrices.h"
 	"dino.h"
@@ -4155,7 +4155,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751634180 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
+1751728971 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -4228,7 +4228,7 @@
 1750074161 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\scene.h
 	<GLFW/glfw3.h>
 
-1751414974 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\moving.h
+1751726896 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\moving.h
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
@@ -4237,7 +4237,7 @@
 1750074162 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\matrices.cpp
 	"../include/matrices.h"
 
-1751414974 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\moving.cpp
+1751726896 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\moving.cpp
 	"../include/moving.h"
 
 1750074162 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\textrendering.cpp
@@ -4253,12 +4253,12 @@
 	<stddef.h>
 	<stdint.h>
 
-1751631685 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
+1751635017 source:c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\src\colisions.cpp
 	"../include/colisions.h"
 	<utility>
 	<iterator>
 
-1751629534 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
+1751648277 c:\users\gabri\onedrive\햞ea de trabalho\trex\fcg_pietro_gabriel\include\colisions.h
 	<vector>
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>

@@ -103,6 +103,20 @@ void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float del
     dino.velocidade = speed;
 }
 
+void avaliaColisao(glm::vec4& vetor, glm::vec4& pos, float angle, Dino& dino)
+{
+    dino.vetor = vetor;
+    dino.posicao = pos;
+    dino.angulo = angle;
+
+    speed = 0.0f;
+    speedA = 0.0f;
+    last_speed = 0.0f;
+    last_speedA = 0.0f;
+}
+
+
+
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
 {
     for (int i = 0; i < 10; ++i)

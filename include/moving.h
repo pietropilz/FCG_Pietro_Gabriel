@@ -15,4 +15,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
 void inicializaCursor(GLFWwindow* window);
 void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
 
+void avaliaColisao(glm::vec4& vetor, glm::vec4& pos, float angle, Dino& dino);
+
 #endif
