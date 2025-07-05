@@ -102,10 +102,10 @@ void main()
         // Equação de Iluminação
         float lambert = max(0,dot(n,l));
 
-        color.rgb = Kd0 * Kd1 * (lambert + 0.5);
+        color.rgb = Kd0 * Kd1;
 
     }else if( object_id == TREE ){
-        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+
         float minx = bbox_min.x;
         float maxx = bbox_max.x;
 
@@ -122,7 +122,7 @@ void main()
         // Equação de Iluminação
         float lambert = max(0,dot(n,l));
 
-        color.rgb = Kd2 * (lambert + 0.5);
+        color.rgb = Kd2;
 
     }else if( object_id == FOLHAS ){
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
@@ -151,7 +151,7 @@ void main()
         // Equação de Iluminação
         float lambert = max(0,dot(n,l));
 
-        color.rgb = Kd0 * Kd1 * Kd2 * Kd3 * Kd4 * Kd5 * (lambert + 0.5);
+        color.rgb = Kd0;
 
     }else if( object_id == STEG ){
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0

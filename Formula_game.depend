@@ -1025,7 +1025,7 @@
 	<glm/glm.hpp>
 	<matrices.h>
 
-1751635419 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\camera.cpp
+1751755742 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\camera.cpp
 	"../include/camera.h"
 	"../include/matrices.h"
 	"dino.h"
@@ -1996,7 +1996,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751675487 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
+1751758002 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -2035,7 +2035,7 @@
 1750107914 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\scene.h
 	<GLFW/glfw3.h>
 
-1751635418 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\moving.h
+1751755742 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\moving.h
 	<glm/mat4x4.hpp>
 	<glm/vec4.hpp>
 	<GLFW/glfw3.h>
@@ -2048,7 +2048,7 @@
 1750107917 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\matrices.cpp
 	"../include/matrices.h"
 
-1751635419 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\moving.cpp
+1751755742 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\moving.cpp
 	"../include/moving.h"
 
 1750107917 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\textrendering.cpp

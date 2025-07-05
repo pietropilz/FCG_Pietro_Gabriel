@@ -221,9 +221,9 @@ int main(int argc, char* argv[])
     LoadTextureImage("../../data/GRANDECO.jpg", false);      // TextureImage0
     LoadTextureImage("../../data/GRANDEB2.jpg", false);      // TextureImage1
     LoadTextureImage("../../data/tree/maple_bark.png", false); //troncos
-    LoadTextureImage("../../data/tree/maple_leaf.png", false); //folhas
+    LoadTextureImage("../../data/tree/folha.png", false); //folhas
     LoadTextureImage("../../data/steg/STEGOSRS_1.png", false); //stegossauro
-    LoadTextureImage("../../data/grass.png", true); //stegossauro
+    LoadTextureImage("../../data/grass.png", true); //grama
     LoadTextureImage("../../data/ceu.jpg", false); //ceu
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
@@ -428,8 +428,14 @@ int main(int argc, char* argv[])
                 glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
                 glUniform1i(g_object_id_uniform, TREE);
                 DrawVirtualObject("tree_Mesh");
-                DrawVirtualObject("leaves");
+                //DrawVirtualObject("leaves");
                 //DrawVirtualObject("leaves_001");
+
+                glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+                glUniform1i(g_object_id_uniform, FOLHAS);
+                //DrawVirtualObject("tree_Mesh");
+                DrawVirtualObject("leaves");
+                DrawVirtualObject("leaves_001");
                 }
             }
         }
@@ -603,6 +609,7 @@ void LoadShadersFromFiles()
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage4"), 4); //steg
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage5"), 5); //grass
     glUniform1i(glGetUniformLocation(g_GpuProgramID, "TextureImage6"), 6); //sky
+
 
     glUseProgram(0);
 }
