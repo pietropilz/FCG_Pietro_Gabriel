@@ -73,8 +73,8 @@ void main()
     vec4 sentido = normalize(spotlightpos - p);
 
     //suavização
-    float innerAngle = cos(radians(15.0)); // abertura interna do spot
-    float outerAngle = cos(radians(30.0)); // abertura externa do spot
+    float innerAngle = cos(radians(30.0)); // abertura interna do spot
+    float outerAngle = cos(radians(60.0)); // abertura externa do spot
     float angulo = dot(sentido, -spotlightdir);
 
     float spotlight = smoothstep(outerAngle, innerAngle, angulo);
@@ -179,7 +179,7 @@ void main()
         Kd = vec3(1.0, 1.0, 1.0);   // refletância difusa
         Ks = vec3(0.0, 0.0, 0.0);    // refletância especular (branca)
         Ka = vec3(0.5, 0.5, 0.5);   // refletância ambiente (metade da difusa)
-        q  = 0.0;                   // expoente especular de Phong
+        q  = 1.0;                   // expoente especular de Phong
 
 
         // Espectro da fonte de iluminação
@@ -196,6 +196,8 @@ void main()
 
         // Termo especular utilizando o modelo de iluminação de Phong
         vec3 phong_specular_term  = spotlight * Ks * I * pow(max(dot(r, v), 0.0), q);
+
+        color.a = 1;
 
         color.rgb = Kd0 *(lambert_diffuse_term + ambient_term + phong_specular_term);
 
@@ -217,7 +219,6 @@ void main()
 
         U = (x - minx) / (maxx - minx);
         V = (y - miny) / (maxy - miny);
-        W = (z - minz) / (maxz - minz);
         vec3 Kd0 = texture(TextureImage3, vec2(U,V)).rgb;
 
         // Equação de Iluminação
@@ -225,14 +226,14 @@ void main()
         Kd = vec3(1.0, 1.0, 1.0);   // refletância difusa
         Ks = vec3(0.0, 0.0, 0.0);    // refletância especular (branca)
         Ka = vec3(0.5, 0.5, 0.5);   // refletância ambiente (metade da difusa)
-        q  = 0.0;                   // expoente especular de Phong
+        q  = 1.0;                   // expoente especular de Phong
 
 
         // Espectro da fonte de iluminação
         vec3 I = vec3(1.0, 1.0, 1.0);
 
         // Espectro da luz ambiente
-        vec3 Ia = vec3(1.0, 1.0, 1.0);
+        vec3 Ia = vec3(0.2, 0.2, 0.2);
 
         // Termo difuso utilizando a lei dos cossenos de Lambert
         vec3 lambert_diffuse_term = spotlight * Kd * I * max(dot(n, l), 0.0);
