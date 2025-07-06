@@ -4,6 +4,13 @@
 #include <utility>
 #include <iterator>
 
+struct Bbox{
+    glm::vec4 min;
+    glm::vec4 max;
+};
+
+Bbox calculaBox(const glm::vec4& local_min, const glm::vec4& local_max, const glm::mat4& modelMatrix);
+bool colisaoCubos(const glm::vec4& aM, const glm::vec4& am, const glm::vec4& bM, const glm::vec4& bm);
 bool colisaoCilindroPonto(const Arvores& arvores, const Dino& dino, std::vector<int>& colisoes);
 
 bool colisao_arvores(Arvores& arvores, const Dino& dino)
@@ -57,46 +64,43 @@ bool colisao_arvores(Arvores& arvores, const Dino& dino)
     return colisaoCilindroPonto(arvores,dino, ids_colisao);
 }
 
-bool entre_retasperpendiculares(glm::vec4 reta1, glm::vec4 reta2, glm::vec4 ponto){
-
-    float valor1 = reta1[0]*ponto[0] + reta1[2]*ponto[2];
-    float valor2 = reta2[0]*ponto[0] + reta2[2]*ponto[2];
-
-    return valor1 >= 0 && valor2 >= 0;
-}
-
 bool colisaoCilindroPonto(const Arvores& arvores, const Dino& dino, std::vector<int>& colisoes){
     glm::vec4 Cubomenor = dino.bbox_min;
     glm::vec4 Cubomaior = dino.bbox_max;
-    glm::vec4 Cilindro = arvores.bbox_max;
 
-    Cubomaior = dino.ModelMatrix()*Cubomaior;
-    Cubomenor = dino.ModelMatrix()*Cubomenor;
+    Bbox correta = calculaBox(Cubomenor, Cubomaior, dino.ModelMatrix());
+    Cubomaior = correta.max;
+    Cubomenor = correta.min;
 
+    float minX = Cubomenor.x;
+    float maxX = Cubomaior.x;
+    float minZ = Cubomenor.z;
+    float maxZ = Cubomaior.z;
 
-    glm::vec4 ponto1 = Cubomenor;
-    glm::vec4 ponto2 = glm::vec4(Cubomenor[0], Cubomenor[1], Cubomaior[2], 1.0f);
-    glm::vec4 ponto3 = glm::vec4(Cubomaior[0], Cubomenor[1], Cubomenor[2], 1.0f);
-    glm::vec4 ponto4 = Cubomaior;
+    for(int i = 0; i < static_cast<int>(colisoes.size()); i++) {
+        glm::vec4 pos_arvore = arvores.pos[colisoes[i]];
 
-    for(int i =0; i < colisoes.size(); i++){
-        glm::vec4 ponto = arvores.pos[colisoes[i]];
+        float cx = pos_arvore.x;
+        float cz = pos_arvore.z;
 
-        bool teste1 = entre_retasperpendiculares(ponto3 - ponto1, ponto2-ponto1, ponto - ponto1);
-        bool teste2 = entre_retasperpendiculares(ponto3 - ponto4, ponto2-ponto4, ponto - ponto4);
+        float raio = 0.05f;
 
-        if(teste1 && teste2) return true;
+        float px = std::max(minX, std::min(cx, maxX));
+        float pz = std::max(minZ, std::min(cz, maxZ));
+
+        float dx = cx - px;
+        float dz = cz - pz;
+        float dist2 = dx*dx + dz*dz;
+
+        if(dist2 <= raio * raio) return true;
     }
+
     return false;
 }
 
-//--------------------------------------------------------------------------------------------------------------
-struct AABB_Global {
-    glm::vec4 min;
-    glm::vec4 max;
-};
 
-AABB_Global calcularAABBGlobal(const glm::vec4& local_min, const glm::vec4& local_max, const glm::mat4& modelMatrix)
+//--------------------------------------------------------------------------------------------------------------
+Bbox calculaBox(const glm::vec4& local_min, const glm::vec4& local_max, const glm::mat4& modelMatrix)
 {
         glm::vec4 cantos[8] = {
         glm::vec4(local_min.x, local_min.y, local_min.z, 1.0f),
@@ -109,19 +113,18 @@ AABB_Global calcularAABBGlobal(const glm::vec4& local_min, const glm::vec4& loca
         glm::vec4(local_min.x, local_max.y, local_max.z, 1.0f)
     };
 
-    glm::vec4 primeiroCantoTransformado = modelMatrix * cantos[0];
-    AABB_Global globalAABB = { primeiroCantoTransformado, primeiroCantoTransformado };
+    glm::vec4 boxInicial = modelMatrix * cantos[0];
+    Bbox boxFinal = {boxInicial, boxInicial};
 
 
     for (int i = 1; i < 8; ++i) {
         glm::vec4 cantoTransformado = modelMatrix * cantos[i];
 
-        // glm::min e glm::max fazem a comparação por componente
-        globalAABB.min = glm::min(globalAABB.min, cantoTransformado);
-        globalAABB.max = glm::max(globalAABB.max, cantoTransformado);
+        boxFinal.min = glm::min(boxFinal.min, cantoTransformado);
+        boxFinal.max = glm::max(boxFinal.max, cantoTransformado);
     }
 
-    return globalAABB;
+    return boxFinal;
 }
 
 bool colisaoCubos(const glm::vec4& aM, const glm::vec4& am, const glm::vec4& bM, const glm::vec4& bm) {
@@ -132,9 +135,9 @@ bool colisaoCubos(const glm::vec4& aM, const glm::vec4& am, const glm::vec4& bM,
 
 bool colisao_Dinos(const Dino& dino, const Estego& estego)
 {
-    AABB_Global dinoGlobalAABB = calcularAABBGlobal(dino.bbox_min, dino.bbox_max, dino.ModelMatrix());
+    Bbox dinoBox = calculaBox(dino.bbox_min, dino.bbox_max, dino.ModelMatrix());
 
-    AABB_Global estegoGlobalAABB = calcularAABBGlobal(estego.bbox_min, estego.bbox_max, estego.ModelMatrix());
+    Bbox estegoBox = calculaBox(estego.bbox_min, estego.bbox_max, estego.ModelMatrix());
 
-    return colisaoCubos(dinoGlobalAABB.max, dinoGlobalAABB.min, estegoGlobalAABB.max, estegoGlobalAABB.min);
+    return colisaoCubos(dinoBox.max, dinoBox.min, estegoBox.max, estegoBox.min);
 }
