@@ -1,5 +1,4 @@
 #version 330 core
-
 // Atributos de fragmentos recebidos como entrada ("in") pelo Fragment Shader.
 // Neste exemplo, este atributo foi gerado pelo rasterizador como a
 // interpolação da cor de cada vértice, definidas em "shader_vertex.glsl" e
@@ -65,12 +64,32 @@ void main()
     // vértice.
     vec4 p = position_world;
 
+    /////////////////////////////////////////
+    vec4 origin = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 camera_position = inverse(view) * origin;
+
+        vec4 spotlightpos = vec4(0.0, 2.0, 1.0,1.0);
+    vec4 spotlightdir = normalize(vec4(0.0, -1.0, 0.0,0.0));
+    vec4 sentido = normalize(spotlightpos - p);
+
+    float abertura = cos(radians(30.0));
+    float angulo = dot(sentido, -spotlightdir);
+    float spotlight = step(abertura, angulo);
+    ///////////////////////////////////////////
+
+
     // Normal do fragmento atual, interpolada pelo rasterizador a partir das
     // normais de cada vértice.
     vec4 n = normalize(normal);
 
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
-    vec4 l = normalize(vec4(1.0,1.0,0.0,0.0));
+    vec4 l = sentido;
+
+    // Vetor que define o sentido da câmera em relação ao ponto atual.
+    vec4 v = normalize(camera_position - p);
+
+    // Vetor que define o sentido da reflexão especular ideal.
+    vec4 r = reflect(-l, n); // PREENCHA AQUI o vetor de reflexão especular ideal
 
     // Vetor que define o sentido da câmera em relação ao ponto atual.
     //vec4 v = normalize(camera_position - p);
@@ -79,6 +98,12 @@ void main()
     float U = 0.0;
     float V = 0.0;
     float W = 0.0;
+
+    // Parâmetros que definem as propriedades espectrais da superfície
+    vec3 Kd; // Refletância difusa
+    vec3 Ks; // Refletância especular
+    vec3 Ka; // Refletância ambiente
+    float q; // Expoente especular para o modelo de iluminação de Phong
 
 
     /////////////////////////////////////////
@@ -99,10 +124,32 @@ void main()
 
         vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
         vec3 Kd1 = texture(TextureImage1, vec2(U,V)).rgb;
+
         // Equação de Iluminação
         float lambert = max(0,dot(n,l));
 
-        color.rgb = Kd0 * Kd1;
+        Kd = vec3(0.8, 0.8, 0.04);   // refletância difusa
+        Ks = vec3(0.8, 0.8, 0.8);    // refletância especular (branca)
+        Ka = vec3(0.4, 0.4, 0.02);   // refletância ambiente (metade da difusa)
+        q  = 32.0;                   // expoente especular de Phong
+
+
+        // Espectro da fonte de iluminação
+        vec3 I = vec3(1.0, 1.0, 1.0);
+
+        // Espectro da luz ambiente
+        vec3 Ia = vec3(1.0, 1.0, 1.0);
+
+        // Termo difuso utilizando a lei dos cossenos de Lambert
+        vec3 lambert_diffuse_term = spotlight * Kd * I * max(dot(n, l), 0.0);
+
+        // Termo ambiente
+        vec3 ambient_term = Ka * Ia;
+
+        // Termo especular utilizando o modelo de iluminação de Phong
+        vec3 phong_specular_term  = spotlight * Ks * I * pow(max(dot(r, v), 0.0), q);
+
+        color.rgb = Kd0 * Kd1 * (lambert_diffuse_term + ambient_term + phong_specular_term);
 
     }else if( object_id == TREE ){
 
