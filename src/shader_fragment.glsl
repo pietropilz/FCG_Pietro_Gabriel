@@ -68,7 +68,7 @@ void main()
     vec4 origin = vec4(0.0, 0.0, 0.0, 1.0);
     vec4 camera_position = inverse(view) * origin;
 
-    vec4 spotlightpos = vec4(0.0, 200.0, 0.0, 1.0);
+    vec4 spotlightpos = vec4(0.0, 300.0, 0.0, 1.0);
     vec4 spotlightdir = normalize(vec4(-1.0, -1.0, 0.0,0.0));
     vec4 sentido = normalize(spotlightpos - p);
 
@@ -95,7 +95,7 @@ void main()
     vec4 v = normalize(camera_position - p);
 
     // Vetor que define o sentido da reflexão especular ideal.
-    vec4 r = reflect(-l, n); // PREENCHA AQUI o vetor de reflexão especular ideal
+    vec4 r = reflect(-l, n);
 
     // Vetor que define o sentido da câmera em relação ao ponto atual.
     //vec4 v = normalize(camera_position - p);
