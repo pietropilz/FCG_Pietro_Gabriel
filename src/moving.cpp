@@ -54,12 +54,6 @@ void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float del
         speed -= delta_t*deaceleration;
     }
 
-    if(speed*last_speed < 0)
-    {
-        speed = 0.0f;
-        tecla_W = false, tecla_S = false;
-    }
-
     if (!tecla_S && !tecla_W)
     {
         if(speed>0) speed -= speed * delta_t;
@@ -80,12 +74,6 @@ void desloca(glm::vec4& obj_pos, glm::vec4& obj_vec, float& obj_angle, float del
         speedA -= delta_t*deaceleration;
     }
 
-
-    if(speedA*last_speedA < 0)
-    {
-        speedA = 0.0f;
-        tecla_D = false, tecla_A = false;
-    }
 
     if (!tecla_A && !tecla_D)
     {

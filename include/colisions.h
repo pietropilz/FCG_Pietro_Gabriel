@@ -17,7 +17,7 @@ bool colisao_arvores(Arvores& arvores, const Dino& dino);
 
 bool colisao_Dinos(const Dino& dino, const Estego& estego);
 
-
+bool verifica_plano(const Dino& dino);
 
 #endif
 

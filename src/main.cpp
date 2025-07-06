@@ -346,6 +346,8 @@ int main(int argc, char* argv[])
             estego.novaPos(posRandom);
         }
 
+        if(verifica_plano(dino))avaliaColisao(dinoVet_aux, dinoPos_aux, dinoAng_aux, dino);
+
 
         //------------------------------------------------------------------------------------------
         //movimentação da camera
