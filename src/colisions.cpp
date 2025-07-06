@@ -141,3 +141,14 @@ bool colisao_Dinos(const Dino& dino, const Estego& estego)
 
     return colisaoCubos(dinoBox.max, dinoBox.min, estegoBox.max, estegoBox.min);
 }
+
+
+
+
+
+bool verifica_plano(const Dino& dino)
+{
+    Bbox bdino = calculaBox(dino.bbox_min, dino.bbox_max, dino.ModelMatrix());
+
+    return (bdino.max.x > 210.0f) || (bdino.max.z > 210) || (bdino.min.x < -210.0f) || (bdino.min.z < -210.0f);
+}
