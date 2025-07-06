@@ -1,0 +1,16 @@
+# Arquivos binários e objetos
+*.exe
+*.o
+*.obj
+
+# Pastas de build
+bin/
+obj/
+build/
+Debug/
+Release/
+
+# Arquivos temporários
+*.log
+*.tmp
+*.bak
