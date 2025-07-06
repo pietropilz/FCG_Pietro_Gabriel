@@ -130,6 +130,7 @@ void TextRendering_PrintMatrixVectorProduct(GLFWwindow* window, glm::mat4 M, glm
 void TextRendering_PrintMatrixVectorProductMoreDigits(GLFWwindow* window, glm::mat4 M, glm::vec4 v, float x, float y, float scale = 1.0f);
 void TextRendering_PrintMatrixVectorProductDivW(GLFWwindow* window, glm::mat4 M, glm::vec4 v, float x, float y, float scale = 1.0f);
 void TextRendering_ShowSpeed(GLFWwindow* window);
+void TextRendering_ShowComidos(GLFWwindow* window);
 
 void TextRendering_ShowFramesPerSecond(GLFWwindow* window);
 
@@ -224,7 +225,7 @@ int main(int argc, char* argv[])
     LoadTextureImage("../../data/tree/folha.png", false); //folhas
     LoadTextureImage("../../data/steg/STEGOSRS_1.png", false); //stegossauro
     LoadTextureImage("../../data/grass.png", true); //grama
-    LoadTextureImage("../../data/ceu.jpg", false); //ceu
+    LoadTextureImage("../../data/azul.jpg", false); //ceu
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
     ObjModel rexmodel("../../data/T-Rex_Model.obj");
@@ -344,6 +345,13 @@ int main(int argc, char* argv[])
             int numero_aleatorio = distribuicao(gerador);
             glm::vec4 posRandom = arvores_mapa.pos[numero_aleatorio];
             estego.novaPos(posRandom);
+            dino.mover[2] -= 0.07;
+            dino.tamanho[0] += 0.001;
+            dino.tamanho[1] += 0.001;
+            dino.tamanho[2] += 0.001;
+            dino.comidos += 1;
+
+
         }
 
         if(verifica_plano(dino))avaliaColisao(dinoVet_aux, dinoPos_aux, dinoAng_aux, dino);
@@ -392,11 +400,12 @@ int main(int argc, char* argv[])
 
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, REX);
-        DrawVirtualObject("META");
-        DrawVirtualObject("METAojo");
-        DrawVirtualObject("DIENTS");
-        DrawVirtualObject("UNAS");;
-
+        if(!freeCamera){
+            DrawVirtualObject("META");
+            DrawVirtualObject("METAojo");
+            DrawVirtualObject("DIENTS");
+            DrawVirtualObject("UNAS");
+        }
 
         model =   estego.ModelMatrix();
 
@@ -457,6 +466,7 @@ int main(int argc, char* argv[])
         TextRendering_ShowFramesPerSecond(window);
         //Imprime velocidade do jogo
         TextRendering_ShowSpeed(window);
+        TextRendering_ShowComidos(window);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -738,9 +748,26 @@ void TextRendering_ShowSpeed(GLFWwindow* window)
     static int   numchars = 7;
 
 
-    numchars = snprintf(buffer, 20, "%.2f km//h", dino.velocidade*3.6);
+    numchars = snprintf(buffer, 20, "%.2f km/h", dino.velocidade*3.6);
 
     float lineheight = TextRendering_LineHeight(window);
+    float charwidth = TextRendering_CharWidth(window);
+
+    TextRendering_PrintString(window, buffer, 1.0f-(numchars + 1)*charwidth, 0.0f+lineheight, 1.0f);
+}
+
+void TextRendering_ShowComidos(GLFWwindow* window)
+{
+    if ( !g_ShowInfoText )
+        return;
+
+    static char  buffer[30] = "?? dinos devorados";
+    static int   numchars = 30;
+
+
+    numchars = snprintf(buffer, 30, "%d dinos devorados", dino.comidos);
+
+    float lineheight = -1.0f*TextRendering_LineHeight(window);
     float charwidth = TextRendering_CharWidth(window);
 
     TextRendering_PrintString(window, buffer, 1.0f-(numchars + 1)*charwidth, 0.0f+lineheight, 1.0f);

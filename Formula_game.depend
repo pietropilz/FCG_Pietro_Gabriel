@@ -1996,7 +1996,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751809252 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
+1751838483 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -4289,7 +4289,7 @@
 	"matrices.h"
 	"curvas.h"
 
-1751635418 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\dino.h
+1751838672 c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\include\dino.h
 	<glm/glm.hpp>
 	<matrices.h>
 
