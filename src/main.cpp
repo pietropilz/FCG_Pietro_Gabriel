@@ -184,7 +184,7 @@ int main(int argc, char* argv[])
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 #ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
 #endif
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -264,9 +264,9 @@ int main(int argc, char* argv[])
     // Habilitamos o Backface Culling. Veja slides 8-13 do documento Aula_02_Fundamentos_Matematicos.pdf, slides 23-34 do documento Aula_13_Clipping_and_Culling.pdf e slides 112-123 do documento Aula_14_Laboratorio_3_Revisao.pdf.
 
     //desabilitado por culpa do céu
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_BACK);
-    //glFrontFace(GL_CCW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 
     // Inicializamos o código para renderização de texto.
     TextRendering_Init();
@@ -415,12 +415,15 @@ int main(int argc, char* argv[])
         DrawVirtualObject("stego_iris");
         DrawVirtualObject("stego_eye");
 
+        glDisable(GL_CULL_FACE);
 
         model = Matrix_Translate(camera_position_c[0], 0.0f, camera_position_c[2])
                 * Matrix_Scale(400.0f, 400.0f, 400.0f);
         glUniformMatrix4fv(g_model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(g_object_id_uniform, SPHERE);
         DrawVirtualObject("Icosphere");
+
+        glEnable(GL_CULL_FACE);
 
         camera_view_vector = camera_view_vector/norm(camera_view_vector);
 

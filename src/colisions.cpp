@@ -68,20 +68,23 @@ bool colisaoCilindroPonto(const Arvores& arvores, const Dino& dino, std::vector<
     glm::vec4 Cubomenor = dino.bbox_min;
     glm::vec4 Cubomaior = dino.bbox_max;
 
-    Bbox correta = calculaBox(Cubomenor, Cubomaior, dino.ModelMatrix());
-    Cubomaior = correta.max;
-    Cubomenor = correta.min;
-
-    float minX = Cubomenor.x;
-    float maxX = Cubomaior.x;
-    float minZ = Cubomenor.z;
-    float maxZ = Cubomaior.z;
-
     for(int i = 0; i < static_cast<int>(colisoes.size()); i++) {
         glm::vec4 pos_arvore = arvores.pos[colisoes[i]];
 
-        float cx = pos_arvore.x;
-        float cz = pos_arvore.z;
+
+        glm::mat4 modelD = Matrix_Rotate_Y(-dino.angulo)*
+                            Matrix_Translate(-pos_arvore.x, 0.0f, -pos_arvore.z)*
+                            dino.ModelMatrix();
+
+        Bbox correta = calculaBox(Cubomenor, Cubomaior,modelD);
+
+        float minX = correta.min.x;
+        float maxX = correta.max.x;
+        float minZ = correta.min.z;
+        float maxZ = correta.max.z;
+
+        float cx = 0.0f;
+        float cz = 0.0f;
 
         float raio = 0.05f;
 
@@ -94,7 +97,6 @@ bool colisaoCilindroPonto(const Arvores& arvores, const Dino& dino, std::vector<
 
         if(dist2 <= raio * raio) return true;
     }
-
     return false;
 }
 

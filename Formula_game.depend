@@ -1996,7 +1996,7 @@
 	<windows.h>
 	<dlfcn.h>
 
-1751838483 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
+1751848298 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\main.cpp
 	<cmath>
 	<cstdio>
 	<cstdlib>
@@ -4293,7 +4293,7 @@
 	<glm/glm.hpp>
 	<matrices.h>
 
-1751809252 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\colisions.cpp
+1751847907 source:c:\users\windows11-pro\onedrive\documentos\fcg\formula_game\formula_game\src\colisions.cpp
 	"../include/colisions.h"
 	<utility>
 	<iterator>

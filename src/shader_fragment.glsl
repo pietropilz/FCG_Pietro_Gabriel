@@ -18,6 +18,8 @@ in vec4 position_model;
 // Coordenadas de textura obtidas do arquivo OBJ (se existirem!)
 in vec2 texcoords;
 
+
+   in vec2 UV_coords;
 // Matrizes computadas no código C++ e enviadas para a GPU
 uniform mat4 model;
 uniform mat4 view;
@@ -63,6 +65,7 @@ void main()
     // através da interpolação, feita pelo rasterizador, da posição de cada
     // vértice.
     vec4 p = position_world;
+    vec4 o = position_model;
 
     /////////////////////////////////////////
     vec4 origin = vec4(0.0, 0.0, 0.0, 1.0);
@@ -74,13 +77,11 @@ void main()
 
     //suavização
     float innerAngle = cos(radians(30.0)); // abertura interna do spot
-    float outerAngle = cos(radians(60.0)); // abertura externa do spot
+    float outerAngle = cos(radians(50.0)); // abertura externa do spot
     float angulo = dot(sentido, -spotlightdir);
 
     float spotlight = smoothstep(outerAngle, innerAngle, angulo);
 
-    //float abertura = cos(radians(30.0));
-    //float spotlight = step(abertura, angulo);
     ///////////////////////////////////////////
 
 
@@ -91,8 +92,9 @@ void main()
     // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
     vec4 l = sentido;
 
+
     // Vetor que define o sentido da câmera em relação ao ponto atual.
-    vec4 v = normalize(camera_position - p);
+    vec4 v = normalize(camera_position - o);
 
     // Vetor que define o sentido da reflexão especular ideal.
     vec4 r = reflect(-l, n);
@@ -141,7 +143,7 @@ void main()
 
 
         // Espectro da fonte de iluminação
-        vec3 I = vec3(0.5, 0.5, 0.5);
+        vec3 I = vec3(0.7, 0.7, 0.7);
 
         // Espectro da luz ambiente
         vec3 Ia = vec3(0.5, 0.5, 0.5);
@@ -176,7 +178,7 @@ void main()
         // Equação de Iluminação
         float lambert = max(0,dot(n,l));
 
-        Kd = vec3(1.0, 1.0, 1.0);   // refletância difusa
+        Kd = vec3(0.5, 0.5, 0.5);   // refletância difusa
         Ks = vec3(0.0, 0.0, 0.0);    // refletância especular (branca)
         Ka = vec3(0.5, 0.5, 0.5);   // refletância ambiente (metade da difusa)
         q  = 1.0;                   // expoente especular de Phong
@@ -247,7 +249,10 @@ void main()
         color.rgb = Kd0 *(lambert_diffuse_term + ambient_term + phong_specular_term);
 
     }else if( object_id == STEG ){
+
+        color = texture(TextureImage4, UV_coords);
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
+        /*
         float minx = bbox_min.x;
         float maxx = bbox_max.x;
 
@@ -290,6 +295,7 @@ void main()
         vec3 phong_specular_term  = spotlight * Ks * I * pow(max(dot(r, v), 0.0), q);
 
         color.rgb = Kd0 * (lambert_diffuse_term + ambient_term + phong_specular_term);
+        */
 
     }else if( object_id == PLANE ){
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
