@@ -1,1 +1,1 @@
-
+-e "*.exe\n*.o\n*.obj\nbin/\nobj/\nDebug/\nRelease/" 
