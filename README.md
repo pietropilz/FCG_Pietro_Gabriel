@@ -43,4 +43,6 @@ Implementação de diferentes tipos de iluminação: Phong e Lambertiana utiliza
 Implementação de diferentes tipos de rasterização: Gouraud e Blinn-Phong utilizados
 Funcionamento de curvas de bezier: movimentar o estegossauro
 
-
+Passos necessários para compilação e execução:
+Após baixar todos os arquivos, é possível utilizar o a aplicação CodeBlocks para compilar e executar.
+É possível executar por meio do arquivo main.exe em bin->debug->main.exe
