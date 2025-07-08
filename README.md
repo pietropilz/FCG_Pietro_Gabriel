@@ -11,7 +11,9 @@ Duas IAs foram utilizadas, ChatGPT e Gemini. Sua função manteve-se principalme
 
 Implementado:
 Movimentação do modelo do T-Rex controlado pelo usuário. Teclas W,A,S e D para movimento para frente, para trás e para os lados. Esses controles mudam a aceleração do modelo na cena, que faz a velocidade variar de acordo com o tempo, existindo uma inércia no objeto.
+
 Dois modelos de câmera foram implementados, o LookAt, uma câmera que segue a parte traseira do T-Rex, e uma first person camera, que acompanha a visão do objeto em relação a cena. O segundo modelo para a renderização do T-Rex enquanto é utilizado. Para realizar a troca entre os modelos o usuário deve usara a tecla C. O controle de ambas as câmeras é feito pelo mouse e sua posição em relação ao eixo horizontal da tela.
+
 Há 6 modelos sendo utilizados na aplicação, cada um com suas texturas: 
 "T-Rex_Model.obj": T-Rex controlado pelo usuário. Possui duas texturas compostas, uma em cores e outra em preto e branco (GRANDECO.jpg e GRANDEB2.jpg).
 "MapleTree.obj": árvore apenas com tronco e galhos renderizada em posições definidas e igualmente espaçadas por meio de um loop (a aplicação utiliza de 121 árvores). Textura de tronco de árvore (maple_bark.png).
