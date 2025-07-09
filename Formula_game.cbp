@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Laboratorio_2" />
+		<Option title="Trabalho_final_FCG" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -380,7 +380,7 @@
 		<Unit filename="include/tiny_obj_loader.h" />
 		<Unit filename="include/utils.h" />
 		<Unit filename="src/camera.cpp" />
-		<Unit filename="src/colisions.cpp" />
+		<Unit filename="src/collisions.cpp" />
 		<Unit filename="src/curvas.cpp" />
 		<Unit filename="src/glad.cpp" />
 		<Unit filename="src/main.cpp" />

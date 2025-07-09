@@ -251,51 +251,6 @@ void main()
     }else if( object_id == STEG ){
 
         color = texture(TextureImage4, UV_coords);
-        // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
-        /*
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
-
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
-
-        float minz = bbox_min.z;
-        float maxz = bbox_max.z;
-
-        float x = position_model.x;
-        float y = position_model.y;
-        float z = position_model.z;
-
-        V = (y - miny) / (maxy - miny);
-        W = (z - minz) / (maxz - minz);
-
-        vec3 Kd0 = texture(TextureImage4, vec2(V,W)).rgb;
-        // Equação de Iluminação
-        float lambert = max(0,dot(n,l));
-
-        Kd = vec3(1.0, 1.0, 1.0);   // refletância difusa
-        Ks = vec3(0.1, 0.1, 0.1);    // refletância especular (branca)
-        Ka = vec3(0.5, 0.5, 0.5);   // refletância ambiente (metade da difusa)
-        q  = 50.0;                   // expoente especular de Phong
-
-
-        // Espectro da fonte de iluminação
-        vec3 I = vec3(1.0, 1.0, 1.0);
-
-        // Espectro da luz ambiente
-        vec3 Ia = vec3(1.0, 1.0, 1.0);
-
-        // Termo difuso utilizando a lei dos cossenos de Lambert
-        vec3 lambert_diffuse_term = spotlight * Kd * I * max(dot(n, l), 0.0);
-
-        // Termo ambiente
-        vec3 ambient_term = Ka * Ia;
-
-        // Termo especular utilizando o modelo de iluminação de Phong
-        vec3 phong_specular_term  = spotlight * Ks * I * pow(max(dot(r, v), 0.0), q);
-
-        color.rgb = Kd0 * (lambert_diffuse_term + ambient_term + phong_specular_term);
-        */
 
     }else if( object_id == PLANE ){
         // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
