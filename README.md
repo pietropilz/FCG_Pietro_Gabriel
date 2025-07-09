@@ -5,12 +5,12 @@ Pietro Pilz de Lorenzo 588009
 Relatório:
 
 Contribuição dos membros da dupla:
-As implementações do trabalho foram dividas entre os intergrantes. Gabriel foi responsável pelos controles de movimentção, câmera, bezier e colisões. Pietro foi responsável pelos objetos, texturas e iluminação.
+As implementações do trabalho foram dividas entre os integrantes. Gabriel foi responsável pelos controles de movimentação, câmera, bezier e colisões. Pietro foi responsável pelos objetos, texturas e iluminação.
 
 
 Utilização de recursos de IA:
 
-Duas IAs foram utilizadas, ChatGPT e Gemini. Sua função manteve-se principalmente em debug e explicação de conceitos. Há códigos criados por essas IAs na parte de colisões e de iluminação. Para o restante do código, elas não foram necessárias ou não geraram um resultado satisfatório. A geração de código por elas mostrou-se limitada quanto ao macro do trabalho, não conseguindo integrar grandes trechos funcionais. Isso as restringiu a auxilios pequenos, como suavizar a transição da iluminação ou identificar quais aspectos deveriam ser utilizados em certas colisões.
+Duas IAs foram utilizadas, ChatGPT e Gemini. Sua função manteve-se principalmente em debug e explicação de conceitos. Há códigos criados por essas IAs na parte de colisões e de iluminação. Para o restante do código, elas não foram necessárias ou não geraram um resultado satisfatório. A geração de código por elas mostrou-se limitada quanto ao macro do trabalho, não conseguindo integrar grandes trechos funcionais. Isso as restringiu a auxílios pequenos, como suavizar a transição da iluminação ou identificar quais aspectos deveriam ser utilizados em certas colisões.
 
 
 Implementado:
@@ -59,7 +59,7 @@ Conceitos utilizados:
 
 Utilizar o tempo para realizar transformações: transformações e interações realizadas com base no tempo, independente da velocidade de CPU e GPU
 
-Transformações de modelos utilizando matrizes: utilizadas para modelar e mover os obejetos e a câmera
+Transformações de modelos utilizando matrizes: utilizadas para modelar e mover os objetos e a câmera
 
 Lógica de controle não-trivial: os controles do T-Rex e da câmera não são triviais
 
@@ -69,7 +69,7 @@ Utilização e transformação de modelos complexos e texturas: utilizados em to
 
 Controle de câmera: feito através do mouse e seguem a movimentação do T-Rex, seja na LookAt ou na first person camera
 
-Obejto com mais de uma instância: as árvores são geradas em 121 posições diferentes simultâneamente
+Obejto com mais de uma instância: as árvores são geradas em 121 posições diferentes simultaneamente
 
 Testes de intersecção: três tipos utilizados
 
